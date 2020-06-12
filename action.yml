@@ -3,7 +3,8 @@ description: 'Run a number of different Emacs checks'
 inputs:
   checks:
     description: 'List of checks that should be run'
-    default: [ 'melpa' ]
+    default:
+      - 'melpa'
 runs:
   using: 'node12'
   main: 'dist/index.js'
