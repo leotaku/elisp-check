@@ -100,7 +100,7 @@ File globbing is supported."
     (format "::%s " level)
     (when file (format "file=%s," file))
     (when line (format "line=%s," line))
-    (when col (format "col=%s" col))
+    (when col (format "col=%s," col))
     (format "::%s" message))))
 
 (defun elisp-check-package-lint ()
