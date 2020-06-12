@@ -19,7 +19,7 @@ async function main() {
         '--no-site-file',
         '--batch',
         '--load', local_file_name,
-        '--eval', `(elisp-check-install "${check}")'
+        '--eval', `(elisp-check-install "${check}")`,
         '--eval', `(elisp-check-run "${check}" "${file}")`
       ]
     );
