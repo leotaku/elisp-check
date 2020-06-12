@@ -1,7 +1,7 @@
 {
-  "name": "emacs-action",
+  "name": "elisp-check-action",
   "version": "1.0.0",
-  "description": "GitHub Actions for all things Emacs",
+  "description": "GitHub Actions for Emacs lisp checks",
   "main": "index.js",
   "scripts": {
     "lint": "eslint index.js",
