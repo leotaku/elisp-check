@@ -1,19 +1,19 @@
 const core = require('@actions/core');
-const wait = require('./wait');
+const exec = require('@actions/exec');
 
-
-// most @actions toolkit packages have async methods
 async function run() {
-  try { 
-    const ms = core.getInput('milliseconds');
-    console.log(`Waiting ${ms} milliseconds ...`)
+  try {
+    const list = core.getInput('checks');
+    const array = Array.from(list);
+    const spaced = array.join(" ");
 
     core.debug((new Date()).toTimeString())
-    await wait(parseInt(ms));
+    await exec.exec('emacs', [ '--no-site-file', '--batch', '--eval', '(message "foo")' ])
+    await exec.exec('ls')
     core.debug((new Date()).toTimeString())
 
     core.setOutput('time', new Date().toTimeString());
-  } 
+  }
   catch (error) {
     core.setFailed(error.message);
   }

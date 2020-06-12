@@ -1,13 +1,12 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: 'Emacs package check'
+description: 'Run a number of different Emacs checks'
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
-    required: true
-    default: '1000'
-outputs:
-  time: # output will be available to future steps 
-    description: 'The message to output'
+  checks:
+    description: 'List of checks that should be run'
+    default: [ 'melpa' ]
 runs:
   using: 'node12'
   main: 'dist/index.js'
+branding:
+  icon: 'align-left'
+  color: 'purple'
