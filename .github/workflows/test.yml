@@ -7,7 +7,7 @@ on:
       - 'releases/*'
 
 jobs:
-  test:
+  test-on-self:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -15,11 +15,3 @@ jobs:
       with:
         version: 26.3
     - uses: ./
-  test-global:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: purcell/setup-emacs@master
-      with:
-        version: 26.3
-    - uses: leotaku/emacs-action@master
-

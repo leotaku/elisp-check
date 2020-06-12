@@ -69,9 +69,9 @@ File globbing is supported."
 
 (defun elisp-check-install (expr)
   "Install requirements for the given check EXPRESSION and FILE."
+  (package-initialize)
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
   (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
-  (package-initialize)
   (mapc #'package-install (elisp-check-get-props expr :require)))
 
 (defun elisp-check-get-checks (expr)
