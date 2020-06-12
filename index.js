@@ -12,7 +12,7 @@ async function main() {
 
     // Get check name and execute
     const check = core.getInput('check');
-    const file = core.getInput('file');
+    const file = core.getInput('files');
     await exec.exec(
       'emacs',
       [
