@@ -961,7 +961,7 @@ const core = __webpack_require__(470);
 const exec = __webpack_require__(986);
 const fs = __webpack_require__(747)
 
-const local_file_name = '__github-action-elisp-check.el';
+const local_file_name = '/tmp/__github-action-elisp-check.el';
 const elisp = fs.readFileSync(__webpack_require__.ab + "elisp-check.el", 'utf-8')
 
 async function main() {
