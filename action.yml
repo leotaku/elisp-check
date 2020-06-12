@@ -2,9 +2,8 @@ name: 'Emacs package check'
 description: 'Run a number of different Emacs checks'
 inputs:
   checks:
-    description: 'List of checks that should be run'
-    default:
-      - 'melpa'
+    description: 'Check or group that should be run'
+    default: 'melpa'
 runs:
   using: 'node12'
   main: 'dist/index.js'
