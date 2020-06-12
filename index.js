@@ -2,7 +2,7 @@ const core = require('@actions/core');
 const exec = require('@actions/exec');
 const fs = require('fs')
 
-const local_file_name = '__github-action-elisp-check.el';
+const local_file_name = '/tmp/__github-action-elisp-check.el';
 const elisp = fs.readFileSync(__dirname + '/elisp-check.el', 'utf-8')
 
 async function main() {
