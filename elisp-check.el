@@ -92,7 +92,7 @@ File globbing is supported."
          (fun (lambda (it)
                 (elisp-check--explode
                  (plist-get it prop)))))
-    (mapcan fun checks)))
+    (apply #'append (mapcar fun checks))))
 
 (defun elisp-check--explode (val)
   (if (listp val)
