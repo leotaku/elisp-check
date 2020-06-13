@@ -51,13 +51,16 @@
   "Alist from check names to definitions.")
 
 (defun elisp-check-run (expr file)
-  "Run the given check EXPRESSION with entry FILE.
+  "Run the given check EXPR with entry FILE.
 File globbing is supported."
   ;; Add repository to load-path
   (add-to-list 'load-path default-directory)
   ;; Require all explicit dependencies
+  (elisp-check-emit 'debug "Requiring test dependencies...")
   (mapc #'require (elisp-check-get-props expr :require))
+  (elisp-check-emit 'debug "Requiring test dependencies... done")
   ;; Run checker functions
+  (elisp-check-emit 'debug "Running all checks...")
   (let ((checks (elisp-check-get-props expr :function))
         (buffers (find-file-noselect file nil nil t)))
     (dolist (buffer (elisp-check--explode buffers))
@@ -65,15 +68,18 @@ File globbing is supported."
         (read-only-mode 1)
         (save-excursion
           (mapc #'funcall checks))
-        (read-only-mode -1)))))
+        (read-only-mode -1))))
+  (elisp-check-emit 'debug "Running all checks... done"))
 
 (defun elisp-check-install (expr)
-  "Install requirements for the given check EXPRESSION and FILE."
+  "Install requirements for the given check EXPR and FILE."
+  (elisp-check-emit 'debug "Installing required packages...")
   (package-initialize)
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
   (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
   (package-refresh-contents)
-  (mapc #'package-install (elisp-check-get-props expr :require)))
+  (mapc #'package-install (elisp-check-get-props expr :require))
+  (elisp-check-emit 'debug "Installing required packages... done") )
 
 (defun elisp-check-get-checks (expr)
   (let* ((check (alist-get expr elisp-check-alist nil nil #'string=))
