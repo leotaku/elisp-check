@@ -1,13 +1,12 @@
 const core = require('@actions/core');
 const exec = require('@actions/exec');
-const local_file_name = __dirname + '/check-elisp.el';
+const local_file_name = __dirname + '/elisp-check.el';
 
 async function main() {
   try {
     // Get check name and execute
     const check = core.getInput('check');
     const file = core.getInput('files');
-    await exec.exec('ls', [ __dirname ]);
     await exec.exec(
       'emacs',
       [
