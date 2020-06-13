@@ -37,7 +37,7 @@
 
 (defvar elisp-check-alist
   '(("melpa"
-     :collection ("byte-compile" "checkdoc" "package-lint"))
+     :collection ("byte-compile" "package-lint" "checkdoc"))
     ("byte-compile"
      :function elisp-check-byte-compile
      :require bytecomp)
