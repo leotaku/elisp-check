@@ -9,9 +9,13 @@ on:
 jobs:
   test-on-self:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        emacs: [ snapshot, 26.3, 26.2, 26.1, 25.3, 25.2, 25.1 ]
     steps:
-    - uses: actions/checkout@v1
-    - uses: purcell/setup-emacs@master
+    - uses: actions/checkout@v2
+    - uses: purcell/setup-emacs@v2
       with:
-        version: 26.3
+        version: ${{ matrix.emacs }}
     - uses: ./
