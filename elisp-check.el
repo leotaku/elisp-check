@@ -33,8 +33,6 @@
 ;;
 ;; Refer to the repository README.md for documentation.
 
-(require 'gv)
-
 ;;; Code:
 
 (defvar elisp-check-alist
@@ -129,7 +127,7 @@ File globbing is supported."
 
 (defun elisp-check--byte-compile-emit (msg &optional pos _fill level)
   (save-excursion
-    (setf (point) pos)
+    (goto-char pos)
     (elisp-check-emit
      (if (eq level :warning) 'warning 'error)
      msg
@@ -139,11 +137,11 @@ File globbing is supported."
 
 (defun elisp-check-parse (regexp matches handler)
   (save-excursion
-    (setf (point) 0)
+    (goto-char 0)
     (while (/= (point-at-eol) (point-max))
       (save-excursion
         (save-match-data
-          (setf (point) (point-at-bol))
+          (goto-char (point-at-bol))
           (condition-case err
               (let ((seq (number-sequence 1 matches)))
                 (re-search-forward regexp)
