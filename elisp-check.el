@@ -112,6 +112,21 @@ File globbing is supported."
           (col (nth 1 lint)))
       (elisp-check-emit level msg file line col))))
 
+(defun elisp-check-byte-compile ()
+  (let ((byte-compile-dest-file (make-temp-file "bytecomp-"))
+        (byte-compile-log-warning-function #'elisp-check--byte-compile-emit))
+    (byte-compile-file (buffer-file-name))))
+
+(defun elisp-check--byte-compile-emit (msg &optional pos _fill level)
+  (save-excursion
+    (setf (point) pos)
+    (elisp-check-emit
+     (if (eq level :warning) 'warning 'error)
+     msg
+     (buffer-file-name)
+     (line-number-at-pos nil t)
+     (current-column))))
+
 (provide 'elisp-check)
 
 ;;; elisp-check.el ends here
