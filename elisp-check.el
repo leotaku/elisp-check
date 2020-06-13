@@ -33,6 +33,8 @@
 ;;
 ;; Refer to the repository README.md for documentation.
 
+(require 'gv)
+
 ;;; Code:
 
 (defvar elisp-check-alist
