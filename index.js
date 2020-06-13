@@ -12,6 +12,7 @@ async function main() {
       [
         '--no-site-file',
         '--batch',
+        '--eval', '(setq debug-on-error t)',
         '--load', local_file_name,
         '--eval', `(elisp-check-install "${check}")`,
         '--eval', `(elisp-check-run "${check}" "${file}")`
