@@ -127,6 +127,31 @@ File globbing is supported."
      (line-number-at-pos nil t)
      (current-column))))
 
+(defun elisp-check-parse (regexp matches handler)
+  (save-excursion
+    (setf (point) 0)
+    (while (/= (point-at-eol) (point-max))
+      (save-excursion
+        (save-match-data
+          (setf (point) (point-at-bol))
+          (condition-case err
+              (let ((seq (number-sequence 1 matches)))
+                (re-search-forward regexp)
+                (apply handler (mapcar #'match-string-no-properties seq)))
+            (error nil))))
+      (forward-line))))
+
+(defun elisp-check-checkdoc ()
+  (let ((checkdoc-autofix-flag 'never)
+        (checkdoc-diagnostic-buffer
+         (format "*%s doc errors*" (current-buffer))))
+    (checkdoc-current-buffer t)
+    (with-current-buffer checkdoc-diagnostic-buffer
+      (elisp-check-parse
+       "\\(.*\\):\\(.*\\): \\(.*\\)"
+       3 (lambda (file line msg)
+           (elisp-check-emit 'warning msg file line))))))
+
 (provide 'elisp-check)
 
 ;;; elisp-check.el ends here
