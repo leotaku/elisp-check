@@ -82,7 +82,7 @@ File globbing is supported."
   (elisp-check-emit 'debug "Installing required packages... done") )
 
 (defun elisp-check-get-checks (expr)
-  (let* ((check (alist-get expr elisp-check-alist nil nil #'string=))
+  (let* ((check (assoc expr elisp-check-alist))
          (deps (plist-get check :collection))
          (dep-values (apply #'append (mapcar #'elisp-check-get-checks deps))))
     (cons check dep-values)))
