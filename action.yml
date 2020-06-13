@@ -3,7 +3,7 @@ description: 'Run a number of different Emacs lisp checks'
 inputs:
   check:
     description: 'Check expression that should be run'
-    default: 'package-lint'
+    default: 'melpa'
   files:
     description: |
       Entry files for checks where it is relevant.
