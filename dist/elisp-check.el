@@ -51,13 +51,16 @@
   "Alist from check names to definitions.")
 
 (defun elisp-check-run (expr file)
-  "Run the given check EXPRESSION with entry FILE.
+  "Run the given check EXPR with entry FILE.
 File globbing is supported."
   ;; Add repository to load-path
   (add-to-list 'load-path default-directory)
   ;; Require all explicit dependencies
+  (elisp-check-emit 'debug "Requiring test dependencies...")
   (mapc #'require (elisp-check-get-props expr :require))
+  (elisp-check-emit 'debug "Requiring test dependencies... done")
   ;; Run checker functions
+  (elisp-check-emit 'debug "Running all checks...")
   (let ((checks (elisp-check-get-props expr :function))
         (buffers (find-file-noselect file nil nil t)))
     (dolist (buffer (elisp-check--explode buffers))
@@ -65,15 +68,18 @@ File globbing is supported."
         (read-only-mode 1)
         (save-excursion
           (mapc #'funcall checks))
-        (read-only-mode -1)))))
+        (read-only-mode -1))))
+  (elisp-check-emit 'debug "Running all checks... done"))
 
 (defun elisp-check-install (expr)
-  "Install requirements for the given check EXPRESSION and FILE."
+  "Install requirements for the given check EXPR and FILE."
+  (elisp-check-emit 'debug "Installing required packages...")
   (package-initialize)
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
   (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
   (package-refresh-contents)
-  (mapc #'package-install (elisp-check-get-props expr :require)))
+  (mapc #'package-install (elisp-check-get-props expr :require))
+  (elisp-check-emit 'debug "Installing required packages... done") )
 
 (defun elisp-check-get-checks (expr)
   (let* ((check (alist-get expr elisp-check-alist nil nil #'string=))
@@ -111,6 +117,46 @@ File globbing is supported."
           (line (nth 0 lint))
           (col (nth 1 lint)))
       (elisp-check-emit level msg file line col))))
+
+(defun elisp-check-byte-compile ()
+  (let ((byte-compile-dest-file (make-temp-file "bytecomp-"))
+        (byte-compile-log-warning-function #'elisp-check--byte-compile-emit))
+    (byte-compile-file (buffer-file-name))))
+
+(defun elisp-check--byte-compile-emit (msg &optional pos _fill level)
+  (save-excursion
+    (setf (point) pos)
+    (elisp-check-emit
+     (if (eq level :warning) 'warning 'error)
+     msg
+     (buffer-file-name)
+     (line-number-at-pos nil t)
+     (current-column))))
+
+(defun elisp-check-parse (regexp matches handler)
+  (save-excursion
+    (setf (point) 0)
+    (while (/= (point-at-eol) (point-max))
+      (save-excursion
+        (save-match-data
+          (setf (point) (point-at-bol))
+          (condition-case err
+              (let ((seq (number-sequence 1 matches)))
+                (re-search-forward regexp)
+                (apply handler (mapcar #'match-string-no-properties seq)))
+            (error nil))))
+      (forward-line))))
+
+(defun elisp-check-checkdoc ()
+  (let ((checkdoc-autofix-flag 'never)
+        (checkdoc-diagnostic-buffer
+         (format "*%s doc errors*" (current-buffer))))
+    (checkdoc-current-buffer t)
+    (with-current-buffer checkdoc-diagnostic-buffer
+      (elisp-check-parse
+       "\\(.*\\):\\(.*\\): \\(.*\\)"
+       3 (lambda (file line msg)
+           (elisp-check-emit 'warning msg file line))))))
 
 (provide 'elisp-check)
 
