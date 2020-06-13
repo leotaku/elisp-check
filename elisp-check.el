@@ -78,7 +78,7 @@ File globbing is supported."
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
   (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
   (package-refresh-contents)
-  (mapc #'package-install (elisp-check-get-props expr :require))
+  (mapc #'package-install (elisp-check-get-props expr :package))
   (elisp-check-emit 'debug "Installing required packages... done") )
 
 (defun elisp-check-get-checks (expr)
