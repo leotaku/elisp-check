@@ -119,7 +119,9 @@ File globbing is supported."
       (elisp-check-emit level msg file line col))))
 
 (defun elisp-check-byte-compile ()
-  (let ((byte-compile-dest-file (make-temp-file "bytecomp-"))
+  (let ((byte-compile-dest-file-function
+         (lambda (file)
+           (file-name-directory (make-temp-file "bytecomp-"))))
         (byte-compile-log-warning-function #'elisp-check--byte-compile-emit))
     (byte-compile-file (buffer-file-name))))
 
