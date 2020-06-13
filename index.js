@@ -1,16 +1,9 @@
 const core = require('@actions/core');
 const exec = require('@actions/exec');
-const fs = require('fs')
-
-const local_file_name = '/tmp/__github-action-elisp-check.el';
-const elisp = fs.readFileSync(__dirname + '/elisp-check.el', 'utf-8')
+const local_file_name = __dirname + '/check-elisp.el';
 
 async function main() {
   try {
-    // Setup local elisp file
-    fs.writeFileSync(local_file_name, elisp);
-    console.log(__dirname);
-
     // Get check name and execute
     const check = core.getInput('check');
     const file = core.getInput('files');
