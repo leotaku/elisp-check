@@ -65,11 +65,9 @@ File globbing is supported."
         (buffers (find-file-noselect file nil nil t)))
     (dolist (buffer (elisp-check--explode buffers))
       (with-current-buffer buffer
-        (read-only-mode 1)
-        (save-excursion
-          (mapc #'funcall checks))
-        (read-only-mode -1))))
-  (elisp-check-emit 'debug "Running all checks... done"))
+        (let ((buffer-read-only t))
+          (save-excursion
+            (mapc #'funcall checks)))))))
 
 (defun elisp-check-install (expr)
   "Install requirements for the given check EXPR and FILE."
