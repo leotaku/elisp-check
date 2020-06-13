@@ -968,6 +968,7 @@ async function main() {
   try {
     // Setup local elisp file
     fs.writeFileSync(local_file_name, elisp);
+    console.log(__dirname);
 
     // Get check name and execute
     const check = core.getInput('check');
