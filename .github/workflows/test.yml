@@ -32,3 +32,12 @@ jobs:
       with:
         version: ${{ matrix.emacs }}
     - uses: ./
+  test-on-simple:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+        repository: leotaku/theist-mode
+    - uses: purcell/setup-emacs@master
+      with:
+        version: 26.3
+    - uses: leotaku/elisp-check-action@master
