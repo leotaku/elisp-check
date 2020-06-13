@@ -7,6 +7,7 @@ async function main() {
     // Get check name and execute
     const check = core.getInput('check');
     const file = core.getInput('files');
+    await exec.exec('ls', [ __dirname ]);
     await exec.exec(
       'emacs',
       [
