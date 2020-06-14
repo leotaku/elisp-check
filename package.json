@@ -11,7 +11,7 @@
   "keywords": [
     "emacs",
     "emacs-lisp",
-    "github-actions"
+    "github-actions",
     "linting",
     "testing"
   ],
