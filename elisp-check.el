@@ -113,11 +113,9 @@ dependencies using the package.el package manager."
   "Get a list of buffers for the given FILE-OR-FILES.
 File globbing is supported."
   (let* ((files (elisp-check--listify file-or-files))
-         (fun (lambda (file)
-                (elisp-check--listify
-                 (find-file-noselect file nil nil t))))
-         (buffers (apply #'append (mapcar fun files))))
-    buffers))
+         (file-sets (mapcar #'file-expand-wildcards files))
+         (files (apply #'append file-sets)))
+    (mapcar #'find-file-noselect buffers)))
 
 (defun elisp-check--get-requires ()
   "Return local files for `require' statements in the current buffer.
