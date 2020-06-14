@@ -283,7 +283,8 @@ order to hook `byte-compile-file' into the CI message mechanism."
        "\\(.*\\):\\(.*\\): \\(.*\\)"
        3 (lambda (file line msg)
            (elisp-check-emit 'warning msg file line)))
-      (kill-buffer-and-window))))
+      (unless noninteractive
+        (kill-buffer-and-window)))))
 
 (defun elisp-check-ert (&rest _other)
   "Run a ERT check on tests defined in the current buffer."
