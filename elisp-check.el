@@ -115,7 +115,7 @@ File globbing is supported."
   (let* ((files (elisp-check--listify file-or-files))
          (file-sets (mapcar #'file-expand-wildcards files))
          (files (apply #'append file-sets)))
-    (mapcar #'find-file-noselect buffers)))
+    (mapcar #'find-file-noselect files)))
 
 (defun elisp-check--get-requires ()
   "Return local files for `require' statements in the current buffer.
