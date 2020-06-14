@@ -249,14 +249,13 @@ order to hook `byte-compile-file' into the CI message mechanism."
 ;; for older versions of Emacs.
 
 (defadvice byte-compile-log-warning
-    (around elisp-check--advice-byte-compile-log)
+    (around elisp-check--advice-byte-compile-log disable)
   "Emit byte compile errors and warnings as CI messages."
   (elisp-check--byte-compile-emit
    string
    byte-compile-last-position
    fill
    level))
-(ad-deactivate 'byte-compile-log-warning)
 
 (defun elisp-check-checkdoc (&rest other)
   "Run a checkdoc check on the current and OTHER buffers."
