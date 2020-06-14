@@ -220,26 +220,16 @@ called with all captures as its arguments."
           (col (nth 1 lint)))
       (elisp-check-emit level msg file line col))))
 
-;; HACK: Advice `byte-compile-log-warning' for older Emacs versions
-;; where `byte-compile-log-warning-function' does not exist.
-
-(unless (boundp 'byte-compile-log-warning-function)
-  (defadvice byte-compile-log-warning (around elisp-check-byte-compile-log)
-    (elisp-check--byte-compile-emit
-     string
-     byte-compile-last-position
-     fill
-     level)))
-
 (defun elisp-check-byte-compile (&rest other)
   "Run a byte compile check on the current and OTHER buffers."
+  (ad-activate 'byte-compile-log-warning)
   (let ((byte-compile-dest-file-function
          (lambda (file)
-           (file-name-directory (make-temp-file "bytecomp-"))))
-        (byte-compile-log-warning-function #'elisp-check--byte-compile-emit))
+           (file-name-directory (make-temp-file "bytecomp-")))))
     (byte-compile-file (buffer-file-name))
     (dolist (buffer other)
-      (byte-compile-file (buffer-file-name buffer)))))
+      (byte-compile-file (buffer-file-name buffer))))
+  (ad-deactivate 'byte-compile-log-warning))
 
 (defun elisp-check--byte-compile-emit (msg &optional pos _fill level)
   "Emit a CI message for MSG, POS and LEVEL.
@@ -253,6 +243,19 @@ order to hook `byte-compile-file' into the CI message mechanism."
      byte-compile-current-file
      (line-number-at-pos nil)
      (current-column))))
+
+;; HACK: Advice `byte-compile-log-warning' instead of using the proper
+;; variable `byte-compile-log-warning-function' as it does not exist
+;; for older versions of Emacs.
+
+(defadvice byte-compile-log-warning
+    (around elisp-check--advice-byte-compile-log)
+  "Emit byte compile errors and warnings as CI messages."
+  (elisp-check--byte-compile-emit
+   string
+   byte-compile-last-position
+   fill
+   level))
 
 (defun elisp-check-checkdoc (&rest other)
   "Run a checkdoc check on the current and OTHER buffers."
