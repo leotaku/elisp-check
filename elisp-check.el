@@ -1,4 +1,4 @@
-;;; elisp-check.el --- Run elisp checks for CI
+;;; elisp-check.el --- Run elisp checks for CI  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2019-2019 Leo Gaskin
 
