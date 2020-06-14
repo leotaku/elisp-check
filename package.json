@@ -1,5 +1,5 @@
 {
-  "name": "elisp-check-action",
+  "name": "elisp-check",
   "version": "1.0.0",
   "description": "GitHub Actions for Emacs lisp checks",
   "main": "index.js",
@@ -9,14 +9,14 @@
     "url": "git+https://github.com/leotaku/emacs-action.git"
   },
   "keywords": [
-    "GitHub",
-    "Actions",
-    "Emacs",
-    "Lint",
-    "Test"
+    "emacs",
+    "emacs-lisp",
+    "github-actions"
+    "linting",
+    "testing"
   ],
-  "author": "GitHub",
-  "license": "AGPL-3.0-or-later",
+  "author": "Leo Gaskin <leo.gaskin@brg-feldkirchen.at>",
+  "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/leotaku/emacs-action/issues"
   },
