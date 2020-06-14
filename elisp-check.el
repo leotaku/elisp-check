@@ -67,14 +67,16 @@ dependencies using the package.el package manager."
   (mapc #'require (elisp-check-get-props expr :require))
   ;; Run checker functions
   (let ((buffers (elisp-check-get-buffers file-or-glob))
-        (fun (elisp-check-get-props expr :function)))
+        (check-funs (elisp-check-get-props expr :function)))
     (unless buffers
       (elisp-check-error "File `%s' does not exist." file-or-glob))
+    (unless check-funs
+      (elisp-check-error "Check `%s' does not exist." expr))
     (when install
       (elisp-check--apply
        buffers
        (list #'elisp-check--install-requires)))
-    (when fun
+    (when check-funs
       (elisp-check--apply buffers fun))))
 
 (defun elisp-check--apply (buffers check-funs)
