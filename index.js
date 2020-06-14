@@ -4,9 +4,9 @@ const local_file_name = __dirname + '/elisp-check.el';
 
 async function main() {
   try {
-    // Get check name and execute
+    // Get inputs and execute
     const check = core.getInput('check');
-    const file = core.getInput('files');
+    const file = core.getInput('file');
     await exec.exec(
       'emacs',
       [
@@ -14,8 +14,7 @@ async function main() {
         '--batch',
         '--eval', '(setq debug-on-error t)',
         '--load', local_file_name,
-        '--eval', `(elisp-check-install "${check}")`,
-        '--eval', `(elisp-check-run "${check}" "${file}")`
+        '--eval', `(elisp-check-run "${check}" "${file}" t)`
       ]
     );
   }

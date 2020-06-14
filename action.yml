@@ -1,14 +1,17 @@
-name: 'Emacs lisp check'
-description: 'Run a number of different Emacs lisp checks'
+name: 'Emacs Lisp check'
+description: |
+  Run a number of different Emacs Lisp checks.
 inputs:
   check:
-    description: 'Check expression that should be run'
-    default: 'melpa'
-  files:
     description: |
-      Entry files for checks where it is relevant.
-      Globbing is supported.
-    default: "*.el"
+      Check expression that should be run.
+      Consult the README for supported checks.
+    default: 'melpa'
+  file:
+    description: |
+      Entry file for Emacs Lisp checks.
+      Basic globbing is supported.
+    default: '*.el'
 runs:
   using: 'node12'
   main: 'index.js'
