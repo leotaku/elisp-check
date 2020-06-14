@@ -76,8 +76,7 @@ dependencies using the package.el package manager."
       (elisp-check--apply
        buffers
        (list #'elisp-check--install-requires)))
-    (when check-funs
-      (elisp-check--apply buffers fun))))
+    (elisp-check--apply buffers check-funs)))
 
 (defun elisp-check--apply (buffers check-funs)
   "Apply the given CHECK-FUNS to the given BUFFERS."
