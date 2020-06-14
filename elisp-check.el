@@ -220,6 +220,17 @@ called with all captures as its arguments."
           (col (nth 1 lint)))
       (elisp-check-emit level msg file line col))))
 
+;; HACK: Advice `byte-compile-log-warning' for older Emacs versions
+;; where `byte-compile-log-warning-function' does not exist.
+
+(unless (boundp 'byte-compile-log-warning-function)
+  (defadvice byte-compile-log-warning (around elisp-check-byte-compile-log)
+    (elisp-check--byte-compile-emit
+     string
+     byte-compile-last-position
+     fill
+     level)))
+
 (defun elisp-check-byte-compile (&rest other)
   "Run a byte compile check on the current and OTHER buffers."
   (let ((byte-compile-dest-file-function
