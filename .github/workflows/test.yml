@@ -34,4 +34,4 @@ jobs:
     - uses: ./
       with:
         file: check-elisp.el
-        checks: checkdoc
+        check: checkdoc
