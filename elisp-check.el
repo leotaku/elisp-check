@@ -222,6 +222,10 @@ called with all captures as its arguments."
 
 (defun elisp-check-byte-compile (&rest other)
   "Run a byte compile check on the current and OTHER buffers."
+  (ad-enable-advice
+   'byte-compile-log-warning
+   'around
+   'elisp-check--advice-byte-compile-log)
   (ad-activate 'byte-compile-log-warning)
   (let ((byte-compile-dest-file-function
          (lambda (file)
