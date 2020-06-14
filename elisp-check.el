@@ -228,7 +228,7 @@ called with all captures as its arguments."
    'elisp-check--advice-byte-compile-log)
   (ad-activate 'byte-compile-log-warning)
   (let ((byte-compile-dest-file-function
-         (lambda (file)
+         (lambda (_file)
            (file-name-directory (make-temp-file "bytecomp-")))))
     (byte-compile-file (buffer-file-name))
     (dolist (buffer other)
