@@ -54,10 +54,15 @@
      :require ert))
   "Alist from check names to definitions.")
 
+(defvar elisp-check-has-failed nil
+  "Variable indicting whether any checks have failed.")
+
 (defun elisp-check-run (expr file-or-glob &optional install)
   "Run the given check EXPR with entry file FILE-OR-GLOB.
 When INSTALL is non-nil, also install all test and file
 dependencies using the package.el package manager."
+  ;; Reset state
+  (setq elisp-check-has-failed nil)
   ;; Install packages
   (when install
     (elisp-check--install-setup expr))
@@ -76,7 +81,10 @@ dependencies using the package.el package manager."
       (elisp-check--apply
        buffers
        (list #'elisp-check--install-requires)))
-    (elisp-check--apply buffers check-funs)))
+    (elisp-check--apply buffers check-funs)
+    ;; Exit
+    (when elisp-check-has-failed
+      (error "Some checks have failed."))))
 
 (defun elisp-check--apply (buffers check-funs)
   "Apply the given CHECK-FUNS to the given BUFFERS."
@@ -146,10 +154,16 @@ Only files in the same directory are returned."
 
 (defun elisp-check-emit (level msg &optional file line col)
   "Emit a CI message for the given arguments.
-MSG is the message text, while LEVEL corresponds to a urgency
-level such as \'warning or \'error.  FILE, LINE and COL may be
-given to associate the message with a file."
+
+MSG is the message text, while LEVEL is a symbol corresponding to
+a urgency level supported by the CI environment, such as warning
+or error.  FILE, LINE and COL may be given to associate the
+message with a file.
+
+When LEVEL is error, also set `elisp-check-has-failed'."
   (let* ((msg (replace-regexp-in-string "\n" "\\\\n" msg)))
+    (when (eq level 'error)
+      (setq elisp-check-has-failed t))
     (message
      (concat
       (format "::%s " level)
