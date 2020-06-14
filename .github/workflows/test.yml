@@ -33,5 +33,5 @@ jobs:
         version: ${{ matrix.emacs_version }}
     - uses: ./
       with:
-        file: check-elisp.el
+        file: elisp-check.el
         check: checkdoc
