@@ -202,7 +202,7 @@ called with all captures as its arguments."
         (save-excursion
           (save-match-data
             (goto-char (point-at-bol))
-            (condition-case _err
+            (condition-case err
                 (let* ((seq (number-sequence 1 captures))
                        (eol (point-at-eol))
                        (success (re-search-forward regexp eol))
