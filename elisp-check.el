@@ -256,6 +256,7 @@ order to hook `byte-compile-file' into the CI message mechanism."
    byte-compile-last-position
    fill
    level))
+(ad-deactivate 'byte-compile-log-warning)
 
 (defun elisp-check-checkdoc (&rest other)
   "Run a checkdoc check on the current and OTHER buffers."
