@@ -68,6 +68,8 @@ dependencies using the package.el package manager."
   ;; Run checker functions
   (let ((buffers (elisp-check-get-buffers file-or-glob))
         (fun (elisp-check-get-props expr :function)))
+    (unless buffers
+      (elisp-check-error "File `%s' does not exist." file-or-glob))
     (when install
       (elisp-check--apply
        buffers
@@ -161,6 +163,12 @@ given to associate the message with a file."
   "Emit a debug MESSAGE formatted with OBJECTS."
   (let ((format (apply #'format message objects)))
     (message "[ELISP-CHECK] %s" format)))
+
+(defun elisp-check-error (message &rest objects)
+  "Emit a CI error MESSAGE formatted with OBJECTS, then exit."
+  (let ((format (apply #'format message objects)))
+    (elisp-check-emit 'error format)
+    (error format)))
 
 (defun elisp-check--listify (val)
   "Return VAL if list, \(list VAL) otherwise."
