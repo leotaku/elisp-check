@@ -240,7 +240,7 @@ order to hook `byte-compile-file' into the CI message mechanism."
      (if (eq level :warning) 'warning 'error)
      msg
      byte-compile-current-file
-     (line-number-at-pos nil t)
+     (line-number-at-pos nil)
      (current-column))))
 
 (defun elisp-check-checkdoc (&rest other)
