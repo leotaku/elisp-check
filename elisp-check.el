@@ -206,11 +206,15 @@ When LEVEL is error, also set `elisp-check-has-failed'."
     (elisp-check-emit 'error format)
     (error format)))
 
-(defun elisp-check--listify (val)
-  "Return VAL if list, \(list VAL) otherwise."
-  (if (listp val)
-      val
-    (list val)))
+(defun elisp-check-format-error (err)
+  "Format the error ERR in a visually pleasing manner."
+  (let* ((symbol (car err))
+         (data (cdr err))
+         (msg (get symbol 'error-message))
+         (data-string (mapconcat #'prin1-to-string data ", ")))
+    (if (eq symbol 'error)
+        data-string
+      (format "%s: %s" msg data-string))))
 
 (defun elisp-check-parse (regexp &optional captures handler)
   "Parse the current buffer for REGEXP.
@@ -236,15 +240,11 @@ called with all captures as its arguments."
         (forward-line)))
     result))
 
-(defun elisp-check-format-error (err)
-  "Format the error ERR in a visually pleasing manner."
-  (let* ((symbol (car err))
-         (data (cdr err))
-         (msg (get symbol 'error-message))
-         (data-string (mapconcat #'prin1-to-string data ", ")))
-    (if (eq symbol 'error)
-        data-string
-      (format "%s: %s" msg data-string))))
+(defun elisp-check--listify (val)
+  "Return VAL if list, \(list VAL) otherwise."
+  (if (listp val)
+      val
+    (list val)))
 
 (defun elisp-check-load-file (&rest _other)
   "Run a `load-file' check on the current buffer."
