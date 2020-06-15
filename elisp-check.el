@@ -110,7 +110,7 @@ dependencies using the package.el package manager."
   (elisp-check--install-packages (elisp-check-get-props expr :package)))
 
 (defun elisp-check--install-requires (&rest _other)
-  "Install packages for Package-Requires for buffers."
+  "Install packages for Package-Requires for current buffer."
   (let* ((parsed (elisp-check-parse ";; Package-Requires: \\((.*)\\)"))
          (reqs (apply #'append (mapcar #'read parsed)))
          (pkgs (mapcar #'car reqs)))
@@ -134,7 +134,7 @@ dependencies using the package.el package manager."
        (mapconcat #'identity errors "\n    ")))))
 
 (defun elisp-check-get-buffers (file-or-files)
-  "Get a list of buffers for the given FILE-OR-FILES.
+  "Get a list of buffers for the given existing FILE-OR-FILES.
 File globbing is supported."
   (let* ((files (elisp-check--listify file-or-files))
          (file-sets (mapcar #'file-expand-wildcards files))
