@@ -239,9 +239,9 @@ called with all captures as its arguments."
 (defun elisp-check-format-error (err)
   "Format the error ERR in a visually pleasing manner."
   (let* ((symbol (car err))
-         (data (elisp-check--listify (cdr err)))
+         (data (cdr err))
          (msg (get symbol 'error-message))
-         (data-string (mapconcat #'identity data ", ")))
+         (data-string (mapconcat #'prin1-to-string data ", ")))
     (if (eq symbol 'error)
         data-string
       (format "%s: %s" msg data-string))))
