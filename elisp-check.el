@@ -157,7 +157,9 @@ returned.  This also walks the required files for more require
 statements.
 
 If PREFIX is not given, extract it from the current file name."
-  (let* ((prefix (or prefix (file-name-base (buffer-file-name))))
+  (let* ((file (file-name-nondirectory (buffer-file-name)))
+         (file-prefix (file-name-sans-extension file))
+         (prefix (or prefix file-prefix))
          (requires (elisp-check-parse "^[ ]*(require '\\(.*?\\))"))
          (fun (lambda (req) (elisp-check--get-require req prefix))))
     (delete-dups (apply #'append (mapcar fun requires)))))
