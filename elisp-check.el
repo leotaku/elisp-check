@@ -278,7 +278,7 @@ order to hook `byte-compile-file' into the CI message mechanism."
      (line-number-at-pos nil)
      (current-column))))
 
-;; HACK: Advice `byte-compile-log-warning' instead of using the proper
+;; Advice `byte-compile-log-warning' instead of using the proper
 ;; variable `byte-compile-log-warning-function' as it does not exist
 ;; for older versions of Emacs.
 
