@@ -10,7 +10,6 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
-    continue-on-error: true
     strategy:
       fail-fast: false
       matrix:
@@ -33,7 +32,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        repo: leotaku/fi-emacs
+        repository: leotaku/fi-emacs
     - uses: purcell/setup-emacs@master
       with:
         version: ${{ matrix.emacs_version }}
