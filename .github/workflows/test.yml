@@ -26,6 +26,11 @@ jobs:
           - 24.3
           - 24.2
           - 24.1
+        ignore_warnings:
+          - true
+        include:
+          - emacs_version: snapshot
+            ignore_warnings: false
     steps:
     - uses: actions/checkout@v2
     - uses: purcell/setup-emacs@master
@@ -35,3 +40,4 @@ jobs:
       with:
         file: elisp-check.el
         check: melpa
+        ignore_warnings: ${{ matrix.ignore_warnings }}
