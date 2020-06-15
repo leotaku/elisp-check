@@ -123,7 +123,7 @@ dependencies using the package.el package manager."
       (unless (eq pkg 'emacs)
         (elisp-check-debug "Installing: %s" pkg)
         (condition-case err
-            (package-install pkg t)
+            (package-install pkg)
           (error (push
                   (format "%s: %s"
                           pkg (elisp-check-format-error err))
