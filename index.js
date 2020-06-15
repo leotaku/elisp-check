@@ -7,12 +7,8 @@ async function main() {
     // Get inputs
     const check = core.getInput('check');
     const file = core.getInput('file');
-    const ignore = bool_to_elisp(
-      core.getInput('ignore_warnings')
-    );
-    const as_errors = bool_to_elisp(
-      core.getInput('warnings_as_errors')
-    );
+    const ignore = getBooleanInput('ignore_warnings')
+    const as_errors = getBooleanInput('warnings_as_errors')
 
     // Execute Emacs checks
     await exec.exec(
@@ -33,12 +29,16 @@ async function main() {
   }
 }
 
-// Convert a Boolean to its Emacs Lisp equivalent
-function bool_to_elisp(bool) {
-  if (bool) {
+// Get a Boolean input as its Emacs Lisp equivalent
+function getBooleanInput(name) {
+  let input = core.getInput(name);
+
+  if (input === 'true') {
     return 't';
-  } else {
+  } else if (input === 'false') {
     return 'nil';
+  } else {
+    throw Error(`Option '${name}' could not be interpreted as a Boolean`);
   }
 }
 
