@@ -58,7 +58,7 @@ with:
 Note that this action does not install a suitable `emacs` executable by itself.
 For this purpose, I recommend using Steve Purcell's excellent [setup-emacs](https://github.com/purcell/setup-emacs/blob/master/README.md) GitHub Action.
 
-For an example of something resembling real-life usage, see the [example Actions config for this repository](https://github.com/leotaku/elisp-check-action/blob/master/.github/workflows/example.yml).
+For an example of real-life usage, see the [Actions config for my `theist-mode` package](https://github.com/leotaku/theist-mode/blob/master/.github/workflows/check.yml).
 
 ## Advanced usage
 
