@@ -74,9 +74,9 @@ dependencies using the package.el package manager."
   (let ((buffers (elisp-check-get-buffers file-or-glob))
         (check-funs (elisp-check-get-props expr :function)))
     (unless buffers
-      (elisp-check-error "File `%s' does not exist." file-or-glob))
+      (elisp-check-error "File `%s' does not exist" file-or-glob))
     (unless check-funs
-      (elisp-check-error "Check `%s' does not exist." expr))
+      (elisp-check-error "Check `%s' does not exist" expr))
     (when install
       (elisp-check--apply
        buffers
@@ -84,7 +84,7 @@ dependencies using the package.el package manager."
     (elisp-check--apply buffers check-funs)
     ;; Exit
     (when elisp-check-has-failed
-      (error "Some checks have failed."))))
+      (error "Some checks have failed"))))
 
 (defun elisp-check--apply (buffers check-funs)
   "Apply the given CHECK-FUNS to the given BUFFERS."
@@ -309,7 +309,7 @@ order to hook `byte-compile-file' into the CI message mechanism."
     (cond
      ((zerop total)
       (elisp-check-emit
-       'error "No tests were defined."))
+       'error "No tests were defined"))
      ((not (zerop unexpected))
       (dolist (test (append (ert--stats-tests stats) nil))
         (let* ((name (ert-test-name test))
@@ -317,7 +317,7 @@ order to hook `byte-compile-file' into the CI message mechanism."
                (expected (ert-test-result-expected-p test result)))
           (when (not expected)
             (elisp-check-emit
-             'error (format "Test `%s' failed." name)))))))))
+             'error (format "Test `%s' failed" name)))))))))
 
 (defun elisp-check-load-file (&rest _other)
   "Run a `load-file' check on the current buffer."
