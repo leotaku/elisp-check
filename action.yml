@@ -4,12 +4,12 @@ description: |
 inputs:
   check:
     description: |
-      Check expression that should be run.
+      Emacs Lisp check to execute.
       Consult the README for supported checks.
     default: 'melpa'
   file:
     description: |
-      Entry file for Emacs Lisp checks.
+      Entry file for Emacs Lisp check.
       Basic globbing is supported.
     default: '*.el'
   ignore_warnings:

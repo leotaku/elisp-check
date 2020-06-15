@@ -63,26 +63,26 @@
 (defvar elisp-check-warnings-as-errors nil
   "Variable indicting whether to treat warnings as errors.")
 
-(defun elisp-check-run (expr file-or-glob &optional install)
-  "Run the given check EXPR with entry file FILE-OR-GLOB.
+(defun elisp-check-run (check file-or-glob &optional install)
+  "Run the given CHECK with entry file FILE-OR-GLOB.
 When INSTALL is non-nil, also install all test and file
 dependencies using the package.el package manager."
   ;; Reset state
   (setq elisp-check-has-failed nil)
   ;; Install packages
   (when install
-    (elisp-check--install-setup expr))
+    (elisp-check--install-setup check))
   ;; Add repository to load-path
   (add-to-list 'load-path default-directory)
   ;; Require all explicit dependencies
-  (mapc #'require (elisp-check-get-props expr :require))
+  (mapc #'require (elisp-check-get-props check :require))
   ;; Run checker functions
   (let ((buffers (elisp-check-get-buffers file-or-glob))
-        (check-funs (elisp-check-get-props expr :function)))
+        (check-funs (elisp-check-get-props check :function)))
     (unless buffers
       (elisp-check-error "File `%s' does not exist" file-or-glob))
     (unless check-funs
-      (elisp-check-error "Check `%s' does not exist" expr))
+      (elisp-check-error "Check `%s' does not exist" check))
     (when install
       (elisp-check--apply
        buffers
@@ -101,13 +101,13 @@ dependencies using the package.el package manager."
           (elisp-check-debug "Running check: %s" check)
           (apply check other))))))
 
-(defun elisp-check--install-setup (expr)
-  "Setup package.el and install packages for the given EXPR."
+(defun elisp-check--install-setup (check)
+  "Setup package.el and install packages for the given CHECK."
   (package-initialize)
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
   (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
   (package-refresh-contents)
-  (elisp-check--install-packages (elisp-check-get-props expr :package)))
+  (elisp-check--install-packages (elisp-check-get-props check :package)))
 
 (defun elisp-check--install-requires (&rest _other)
   "Install packages for Package-Requires for current buffer."
@@ -152,16 +152,16 @@ Only files in the same directory are returned."
           (push (find-file-noselect file) result))))
     result))
 
-(defun elisp-check-get-checks (expr)
-  "Get a list of check plists for the given check EXPR."
-  (let* ((check (cons :name (assoc expr elisp-check-alist)))
+(defun elisp-check-get-checks (check)
+  "Get a list of check plists for the given CHECK."
+  (let* ((check (cons :name (assoc check elisp-check-alist)))
          (deps (plist-get check :collection))
          (dep-values (apply #'append (mapcar #'elisp-check-get-checks deps))))
     (cons check dep-values)))
 
-(defun elisp-check-get-props (expr prop)
-  "Get a list of PROP properties for the given check EXPR."
-  (let* ((checks (elisp-check-get-checks expr))
+(defun elisp-check-get-props (check prop)
+  "Get a list of PROP properties for the given check CHECK."
+  (let* ((checks (elisp-check-get-checks check))
          (fun (lambda (it)
                 (elisp-check--listify
                  (plist-get it prop)))))
