@@ -86,7 +86,7 @@ dependencies using the package.el package manager."
     (when install
       (elisp-check--apply
        buffers
-       (list #'elisp-check--install-requires)))
+       (list #'elisp-check--install-package-requires)))
     (elisp-check--apply buffers check-funs)
     ;; Exit
     (when elisp-check-has-failed
@@ -108,13 +108,6 @@ dependencies using the package.el package manager."
   (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
   (package-refresh-contents)
   (elisp-check--install-packages (elisp-check-get-props check :package)))
-
-(defun elisp-check--install-requires (&rest _other)
-  "Install packages for Package-Requires for current buffer."
-  (let* ((parsed (elisp-check-parse ";; Package-Requires: \\((.*)\\)"))
-         (reqs (apply #'append (mapcar #'read parsed)))
-         (pkgs (mapcar #'car reqs)))
-    (elisp-check--install-packages pkgs)))
 
 (defun elisp-check--install-packages (pkgs)
   "Install PKGS using the package.el package manager."
@@ -166,6 +159,13 @@ Only files in the same directory are returned."
                 (elisp-check--listify
                  (plist-get it prop)))))
     (apply #'append (mapcar fun checks))))
+
+(defun elisp-check--install-package-requires (&rest _other)
+  "Install packages for Package-Requires for current buffer."
+  (let* ((parsed (elisp-check-parse ";; Package-Requires: \\((.*)\\)"))
+         (reqs (apply #'append (mapcar #'read parsed)))
+         (pkgs (mapcar #'car reqs)))
+    (elisp-check--install-packages pkgs)))
 
 (defun elisp-check-emit (level msg &optional file line col)
   "Emit a CI message for the given arguments.
