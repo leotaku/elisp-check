@@ -107,22 +107,31 @@ dependencies using the package.el package manager."
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
   (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
   (package-refresh-contents)
-  (mapc #'package-install (elisp-check-get-props expr :package)))
+  (elisp-check--install-packages (elisp-check-get-props expr :package)))
 
 (defun elisp-check--install-requires (&rest _other)
   "Install packages for Package-Requires for buffers."
   (let* ((parsed (elisp-check-parse ";; Package-Requires: \\((.*)\\)"))
          (reqs (apply #'append (mapcar #'read parsed)))
          (pkgs (mapcar #'car reqs)))
+    (elisp-check--install-packages pkgs)))
+
+(defun elisp-check--install-packages (pkgs)
+  "Install PKGS using the package.el package manager."
+  (let ((errors '()))
     (dolist (pkg pkgs)
       (unless (eq pkg 'emacs)
         (elisp-check-debug "Installing: %s" pkg)
         (condition-case err
-            (package-install pkg)
-          (error
-           (elisp-check-emit
-            'error "Package `%s' could not be installed:\n    %s"
-            pkg (elisp-check-format-error err))))))))
+            (package-install pkg t)
+          (error (push
+                  (format "%s: %s"
+                          pkg (elisp-check-format-error err))
+                  errors)))))
+    (when errors
+      (elisp-check-error
+       "Packages could not be installed:\n    %s"
+       (mapconcat #'identity errors "\n    ")))))
 
 (defun elisp-check-get-buffers (file-or-files)
   "Get a list of buffers for the given FILE-OR-FILES.
