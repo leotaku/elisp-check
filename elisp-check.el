@@ -57,6 +57,12 @@
 (defvar elisp-check-has-failed nil
   "Variable indicting whether any checks have failed.")
 
+(defvar elisp-check-ignore-warnings nil
+  "Variable indicting whether warnings should be ignored.")
+
+(defvar elisp-check-warnings-as-errors nil
+  "Variable indicting whether to treat warnings as errors.")
+
 (defun elisp-check-run (expr file-or-glob &optional install)
   "Run the given check EXPR with entry file FILE-OR-GLOB.
 When INSTALL is non-nil, also install all test and file
@@ -161,16 +167,24 @@ or error.  FILE, LINE and COL may be given to associate the
 message with a file.
 
 When LEVEL is error, also set `elisp-check-has-failed'."
-  (let* ((msg (replace-regexp-in-string "\n" "\\\\n" msg)))
-    (when (eq level 'error)
-      (setq elisp-check-has-failed t))
-    (message
-     (concat
-      (format "::%s " level)
-      (when file (format "file=%s," file))
-      (when line (format "line=%s," line))
-      (when col (format "col=%s," col))
-      (format "::%s" msg)))))
+  (let* ((msg (replace-regexp-in-string "\n" "\\\\n" msg))
+         (is-error (eq level 'error))
+         (is-warning (eq level 'warning))
+         (is-debug (eq level 'debug))
+         (full (concat
+                "::%s "
+                (when file (format "file=%s," file))
+                (when line (format "line=%s," line))
+                (when col (format "col=%s," col))
+                (format "::%s" msg))))
+    (cond
+     ((and is-warning elisp-check-ignore-warnings))
+     ((or is-error (and is-warning elisp-check-warnings-as-errors))
+      (setq elisp-check-has-failed t)
+      (message full 'error))
+     ((or is-warning is-debug)
+      (message full level))
+     (t (elisp-check-error "Unsupported urgency level `%s'" level)))))
 
 (defun elisp-check-debug (message &rest objects)
   "Emit a debug MESSAGE formatted with OBJECTS."

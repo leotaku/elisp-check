@@ -12,6 +12,14 @@ inputs:
       Entry file for Emacs Lisp checks.
       Basic globbing is supported.
     default: '*.el'
+  ignore_warnings:
+    description: |
+      Whether to ignore warnings.
+    default: false
+  warnings_as_errors:
+    description: |
+      Whether to treat errors as warnings.
+    default: false
 runs:
   using: 'node12'
   main: 'index.js'
