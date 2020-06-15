@@ -243,10 +243,6 @@ called with all captures as its arguments."
 
 (defun elisp-check-byte-compile (&rest other)
   "Run a byte compile check on the current and OTHER buffers."
-  (ad-enable-advice
-   'byte-compile-log-warning
-   'around
-   'elisp-check--advice-byte-compile-log)
   (ad-activate 'byte-compile-log-warning)
   (let ((byte-compile-dest-file-function
          (lambda (_file)
@@ -274,13 +270,16 @@ order to hook `byte-compile-file' into the CI message mechanism."
 ;; for older versions of Emacs.
 
 (defadvice byte-compile-log-warning
-    (around elisp-check--advice-byte-compile-log disable)
+    (around elisp-check--advice-byte-compile-log)
   "Emit byte compile errors and warnings as CI messages."
   (elisp-check--byte-compile-emit
    string
-   byte-compile-last-position
+   (or byte-compile-last-position 0)
    fill
    level))
+
+(eval-after-load 'bytecomp
+  '(ad-deactivate 'byte-compile-log-warning))
 
 (defun elisp-check-checkdoc (&rest other)
   "Run a checkdoc check on the current and OTHER buffers."
