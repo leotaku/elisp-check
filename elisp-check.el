@@ -83,11 +83,11 @@ dependencies using the package.el package manager."
       (elisp-check-error "File `%s' does not exist" file-or-glob))
     (unless check-funs
       (elisp-check-error "Check `%s' does not exist" check))
-    (when install
-      (elisp-check--apply
-       buffers
-       (list #'elisp-check--install-package-requires)))
-    (elisp-check--apply buffers check-funs)
+    (if install
+        (elisp-check--apply
+         buffers
+         (cons #'elisp-check--install-package-requires check-funs))
+      (elisp-check--apply buffers check-funs))
     ;; Exit
     (when elisp-check-has-failed
       (error "Some checks have failed"))))
