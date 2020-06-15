@@ -246,26 +246,16 @@ called with all captures as its arguments."
         data-string
       (format "%s: %s" msg data-string))))
 
-(defun elisp-check-package-lint (&rest other)
-  "Run a package-lint check on the current and OTHER buffers."
-  (let ((package-lint-main-file (buffer-file-name)))
-    (elisp-check--package-lint-buffer)
-    (dolist (buffer other)
-      (with-current-buffer buffer
-        (elisp-check--package-lint-buffer)))))
-
-(defun elisp-check--package-lint-buffer ()
-  "Run a package-lint check on the current buffer."
-  (dolist (lint (package-lint-buffer))
-    (let ((level (nth 2 lint))
-          (msg (nth 3 lint))
-          (file (buffer-file-name))
-          (line (nth 0 lint))
-          (col (nth 1 lint)))
-      (elisp-check-emit level msg file line col))))
+(defun elisp-check-load-file (&rest _other)
+  "Run a `load-file' check on the current buffer."
+  (condition-case err
+      (load-file (buffer-file-name))
+    (error (elisp-check-emit
+            'error
+            (elisp-check-format-error err)))))
 
 (defun elisp-check-byte-compile (&rest other)
-  "Run a byte compile check on the current and OTHER buffers."
+  "Run a `byte-compile-file' check on the current and OTHER buffers."
   (ad-activate 'byte-compile-log-warning)
   (let ((byte-compile-dest-file-function
          (lambda (_file)
@@ -304,8 +294,26 @@ order to hook `byte-compile-file' into the CI message mechanism."
 (eval-after-load 'bytecomp
   '(ad-deactivate 'byte-compile-log-warning))
 
+(defun elisp-check-package-lint (&rest other)
+  "Run a `package-lint-buffer' check on the current and OTHER buffers."
+  (let ((package-lint-main-file (buffer-file-name)))
+    (elisp-check--package-lint-buffer)
+    (dolist (buffer other)
+      (with-current-buffer buffer
+        (elisp-check--package-lint-buffer)))))
+
+(defun elisp-check--package-lint-buffer ()
+  "Run a `package-lint-buffer' check on the current buffer."
+  (dolist (lint (package-lint-buffer))
+    (let ((level (nth 2 lint))
+          (msg (nth 3 lint))
+          (file (buffer-file-name))
+          (line (nth 0 lint))
+          (col (nth 1 lint)))
+      (elisp-check-emit level msg file line col))))
+
 (defun elisp-check-checkdoc (&rest other)
-  "Run a checkdoc check on the current and OTHER buffers."
+  "Run a `checkdoc' check on the current and OTHER buffers."
   (let ((checkdoc-autofix-flag 'never)
         (checkdoc-diagnostic-buffer
          (format "*%s doc errors*" (current-buffer))))
@@ -323,7 +331,7 @@ order to hook `byte-compile-file' into the CI message mechanism."
         (kill-buffer-and-window)))))
 
 (defun elisp-check-ert (&rest _other)
-  "Run a ERT check on tests defined in the current buffer."
+  "Run a `ert' check on tests defined in the current buffer."
   (ert-delete-all-tests)
   (elisp-check-load-file)
   (let* ((stats (ert-run-tests-batch))
@@ -341,14 +349,6 @@ order to hook `byte-compile-file' into the CI message mechanism."
           (when (not expected)
             (elisp-check-emit
              'error (format "Test `%s' failed" name)))))))))
-
-(defun elisp-check-load-file (&rest _other)
-  "Run a `load-file' check on the current buffer."
-  (condition-case err
-      (load-file (buffer-file-name))
-    (error (elisp-check-emit
-            'error
-            (elisp-check-format-error err)))))
 
 (provide 'elisp-check)
 
