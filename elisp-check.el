@@ -178,10 +178,8 @@ Only returns buffers for files that match PREFIX."
       (elisp-check-debug "Installing: %s" pkg)
       (condition-case err
           (package-install pkg)
-        (error (push
-                (format "%s: %s"
-                        pkg (elisp-check-format-error err))
-                errors))))
+        (error
+         (push (elisp-check-format-error err) errors))))
     (when errors
       (elisp-check-error
        "Packages could not be installed:\n    %s"
