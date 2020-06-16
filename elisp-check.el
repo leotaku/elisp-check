@@ -75,10 +75,10 @@ dependencies using the package.el package manager."
   ;; Add repository to load-path
   (add-to-list 'load-path default-directory)
   ;; Require all explicit dependencies
-  (mapc #'require (elisp-check-get-props check :require))
+  (mapc #'require (elisp-check--get-props check :require))
   ;; Run checker functions
-  (let ((buffers (elisp-check-get-buffers file-or-glob))
-        (check-funs (elisp-check-get-props check :function)))
+  (let ((buffers (elisp-check--get-buffers file-or-glob))
+        (check-funs (elisp-check--get-props check :function)))
     (unless buffers
       (elisp-check-error "File `%s' does not exist" file-or-glob))
     (unless check-funs
@@ -107,45 +107,28 @@ dependencies using the package.el package manager."
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
   (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
   (package-refresh-contents)
-  (elisp-check--install-packages (elisp-check-get-props check :package)))
+  (elisp-check--install-packages (elisp-check--get-props check :package)))
 
-(defun elisp-check--install-packages (pkgs)
-  "Install PKGS using the package.el package manager."
-  (let ((errors '()))
-    (dolist (pkg pkgs)
-      (unless (eq pkg 'emacs)
-        (elisp-check-debug "Installing: %s" pkg)
-        (condition-case err
-            (package-install pkg)
-          (error (push
-                  (format "%s: %s"
-                          pkg (elisp-check-format-error err))
-                  errors)))))
-    (when errors
-      (elisp-check-error
-       "Packages could not be installed:\n    %s"
-       (mapconcat #'identity errors "\n    ")))))
-
-(defun elisp-check-get-buffers (file-or-files)
+(defun elisp-check--get-buffers (file-or-files)
   "Get a list of buffers for the given existing FILE-OR-FILES.
 File globbing is supported."
-  (let* ((files (elisp-check--listify file-or-files))
+  (let* ((files (elisp-check-listify file-or-files))
          (file-sets (mapcar #'file-expand-wildcards files))
          (files (apply #'append file-sets)))
     (mapcar #'find-file-noselect files)))
 
-(defun elisp-check-get-checks (check)
+(defun elisp-check--get-checks (check)
   "Get a list of check plists for the given CHECK."
   (let* ((check (cons :name (assoc check elisp-check-alist)))
          (deps (plist-get check :collection))
-         (dep-values (apply #'append (mapcar #'elisp-check-get-checks deps))))
+         (dep-values (apply #'append (mapcar #'elisp-check--get-checks deps))))
     (cons check dep-values)))
 
-(defun elisp-check-get-props (check prop)
+(defun elisp-check--get-props (check prop)
   "Get a list of PROP properties for the given check CHECK."
-  (let* ((checks (elisp-check-get-checks check))
+  (let* ((checks (elisp-check--get-checks check))
          (fun (lambda (it)
-                (elisp-check--listify
+                (elisp-check-listify
                  (plist-get it prop)))))
     (apply #'append (mapcar fun checks))))
 
@@ -164,6 +147,13 @@ If PREFIX is not given, extract it from the current file name."
          (fun (lambda (req) (elisp-check--get-require req prefix))))
     (delete-dups (apply #'append (mapcar fun requires)))))
 
+(defun elisp-check--install-package-requires (&rest _other)
+  "Install packages for Package-Requires for current buffer."
+  (let* ((parsed (elisp-check-parse ";; Package-Requires: \\((.*)\\)"))
+         (reqs (apply #'append (mapcar #'read parsed)))
+         (pkgs (delq 'emacs (mapcar #'car reqs))))
+    (elisp-check--install-packages pkgs)))
+
 (defun elisp-check--get-require (name prefix)
   "Return buffers for file with package NAME.
 Only returns buffers for files that match PREFIX."
@@ -181,12 +171,21 @@ Only returns buffers for files that match PREFIX."
             file)
            (buffer-file-name)))))))
 
-(defun elisp-check--install-package-requires (&rest _other)
-  "Install packages for Package-Requires for current buffer."
-  (let* ((parsed (elisp-check-parse ";; Package-Requires: \\((.*)\\)"))
-         (reqs (apply #'append (mapcar #'read parsed)))
-         (pkgs (mapcar #'car reqs)))
-    (elisp-check--install-packages pkgs)))
+(defun elisp-check--install-packages (pkgs)
+  "Install PKGS using the package.el package manager."
+  (let ((errors '()))
+    (dolist (pkg pkgs)
+      (elisp-check-debug "Installing: %s" pkg)
+      (condition-case err
+          (package-install pkg)
+        (error (push
+                (format "%s: %s"
+                        pkg (elisp-check-format-error err))
+                errors))))
+    (when errors
+      (elisp-check-error
+       "Packages could not be installed:\n    %s"
+       (mapconcat #'identity errors "\n    ")))))
 
 (defun elisp-check-emit (level msg &optional file line col)
   "Emit a CI message for the given arguments.
@@ -261,7 +260,7 @@ called with all captures as its arguments."
         (forward-line)))
     result))
 
-(defun elisp-check--listify (val)
+(defun elisp-check-listify (val)
   "Return VAL if list, \(list VAL) otherwise."
   (if (listp val)
       val
