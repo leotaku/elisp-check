@@ -295,7 +295,7 @@ order to hook `byte-compile-file' into the CI message mechanism."
      (if (eq level :warning) 'warning 'error)
      msg
      byte-compile-current-file
-     (line-number-at-pos nil)
+     (line-number-at-pos)
      (current-column))))
 
 ;; Advice `byte-compile-log-warning' instead of using the proper
