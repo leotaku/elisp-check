@@ -101,14 +101,6 @@ dependencies using the package.el package manager."
           (elisp-check-debug "Running check: %s" check)
           (apply check other))))))
 
-(defun elisp-check--install-setup (check)
-  "Setup package.el and install packages for the given CHECK."
-  (package-initialize)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
-  (package-refresh-contents)
-  (elisp-check--install-packages (elisp-check--get-props check :package)))
-
 (defun elisp-check--get-buffers (file-or-files)
   "Get a list of buffers for the given existing FILE-OR-FILES.
 File globbing is supported."
@@ -131,13 +123,6 @@ File globbing is supported."
                 (elisp-check-listify
                  (plist-get it prop)))))
     (apply #'append (mapcar fun checks))))
-
-(defun elisp-check--install-package-requires (&rest _other)
-  "Install packages for Package-Requires for current buffer."
-  (let* ((parsed (elisp-check-parse ";; Package-Requires: \\((.*)\\)"))
-         (conses (apply #'append (mapcar #'read parsed)))
-         (pkgs (delq 'emacs (mapcar #'car conses))))
-    (elisp-check--install-packages pkgs)))
 
 (defun elisp-check--get-requires (&optional prefix)
   "Return local files for `require' statements in the current buffer.
@@ -170,6 +155,21 @@ Only returns buffers for files that match PREFIX."
             "Possibly using local file with different prefix `%s'"
             file)
            (buffer-file-name)))))))
+
+(defun elisp-check--install-setup (check)
+  "Setup package.el and install packages for the given CHECK."
+  (package-initialize)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
+  (package-refresh-contents)
+  (elisp-check--install-packages (elisp-check--get-props check :package)))
+
+(defun elisp-check--install-package-requires (&rest _other)
+  "Install packages for Package-Requires for current buffer."
+  (let* ((parsed (elisp-check-parse ";; Package-Requires: \\((.*)\\)"))
+         (conses (apply #'append (mapcar #'read parsed)))
+         (pkgs (delq 'emacs (mapcar #'car conses))))
+    (elisp-check--install-packages pkgs)))
 
 (defun elisp-check--install-packages (pkgs)
   "Install PKGS using the package.el package manager."
