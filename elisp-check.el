@@ -236,29 +236,21 @@ When LEVEL is error, also set `elisp-check-has-failed'."
         data-string
       (format "%s: %s" msg data-string))))
 
-(defun elisp-check-parse (regexp &optional captures handler)
+(defun elisp-check-parse (regexp &optional handler)
   "Parse the current buffer for REGEXP.
-CAPTURES corresponds to the number of captures, HANDLER is then
-called with all captures as its arguments."
-  (let ((captures (or captures 1))
-        (handler (or handler #'identity))
+HANDLER is then called for every match with the all captures as
+its arguments."
+  (let ((handler (or handler #'concat))
         (result '()))
     (save-excursion
-      (goto-char 0)
-      (while (/= (point-at-eol) (point-max))
-        (save-excursion
-          (save-match-data
-            (goto-char (point-at-bol))
-            (condition-case _err
-                (let* ((seq (number-sequence 1 captures))
-                       (eol (point-at-eol))
-                       (success (re-search-forward regexp eol))
-                       (args (mapcar #'match-string-no-properties seq)))
-                  (when success
-                    (push (apply handler args) result)))
-              (error))))
-        (forward-line)))
-    result))
+      (save-match-data
+        (goto-char 0)
+        (while (re-search-forward regexp nil t)
+          (let* ((len (1- (/ (length (match-data)) 2)))
+                 (seq (number-sequence 1 len))
+                 (captures (mapcar #'match-string-no-properties seq)))
+            (push (apply handler captures) result)))
+        result))))
 
 (defun elisp-check-listify (val)
   "Return VAL if list, \(list VAL) otherwise."
@@ -345,8 +337,8 @@ order to hook `byte-compile-file' into the CI message mechanism."
     (with-current-buffer checkdoc-diagnostic-buffer
       (elisp-check-parse
        "\\(.*\\):\\(.*\\): \\(.*\\)"
-       3 (lambda (file line msg)
-           (elisp-check-emit 'warning msg file line)))
+       (lambda (file line msg)
+         (elisp-check-emit 'warning msg file line)))
       (unless noninteractive
         (kill-buffer-and-window)))))
 
