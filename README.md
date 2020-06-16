@@ -75,8 +75,8 @@ The above yaml code block shows the default configuration values for this GitHub
 
 | Name                 | Description                         | Type                                 |
 |----------------------|-------------------------------------|--------------------------------------|
-| `check`             | Emacs Lisp check to execute        | [Supported check](#supported-checks) |
-| `file`              | Entry file for Emacs Lisp check              | File with globbing                   |
+| `check`              | Emacs Lisp check to execute         | [Supported check](#supported-checks) |
+| `file`               | Entry file for Emacs Lisp check     | File with globbing                   |
 | `ignore_warnings`    | Whether to ignore warnings          | Boolean                              |
 | `warnings_as_errors` | Whether to treat warnings as errors | Boolean                              |
 
