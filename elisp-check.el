@@ -132,6 +132,13 @@ File globbing is supported."
                  (plist-get it prop)))))
     (apply #'append (mapcar fun checks))))
 
+(defun elisp-check--install-package-requires (&rest _other)
+  "Install packages for Package-Requires for current buffer."
+  (let* ((parsed (elisp-check-parse ";; Package-Requires: \\((.*)\\)"))
+         (conses (apply #'append (mapcar #'read parsed)))
+         (pkgs (delq 'emacs (mapcar #'car conses))))
+    (elisp-check--install-packages pkgs)))
+
 (defun elisp-check--get-requires (&optional prefix)
   "Return local files for `require' statements in the current buffer.
 
@@ -146,13 +153,6 @@ If PREFIX is not given, extract it from the current file name."
          (requires (elisp-check-parse "^[ ]*(require '\\(.*?\\))"))
          (fun (lambda (req) (elisp-check--get-require req prefix))))
     (delete-dups (apply #'append (mapcar fun requires)))))
-
-(defun elisp-check--install-package-requires (&rest _other)
-  "Install packages for Package-Requires for current buffer."
-  (let* ((parsed (elisp-check-parse ";; Package-Requires: \\((.*)\\)"))
-         (reqs (apply #'append (mapcar #'read parsed)))
-         (pkgs (delq 'emacs (mapcar #'car reqs))))
-    (elisp-check--install-packages pkgs)))
 
 (defun elisp-check--get-require (name prefix)
   "Return buffers for file with package NAME.
