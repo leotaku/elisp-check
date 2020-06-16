@@ -34,6 +34,8 @@
 
 ;;; Code:
 
+;;;; Variables
+
 (defconst elisp-check-alist
   '(("melpa"
      :collection ("load-file" "byte-compile" "package-lint" "checkdoc"))
@@ -62,6 +64,8 @@
 
 (defvar elisp-check-warnings-as-errors nil
   "Variable indicting whether to treat warnings as errors.")
+
+;;;; Implementation
 
 (defun elisp-check-run (check file-or-glob &optional install)
   "Run the given CHECK with entry file FILE-OR-GLOB.
@@ -185,6 +189,8 @@ Only returns buffers for files that match PREFIX."
        "Packages could not be installed:\n    %s"
        (mapconcat #'identity errors "\n    ")))))
 
+;;;; Standard library
+
 (defun elisp-check-emit (level msg &optional file line col)
   "Emit a CI message for the given arguments.
 
@@ -255,6 +261,8 @@ its arguments."
   (if (listp val)
       val
     (list val)))
+
+;;;; Checkers
 
 (defun elisp-check-load-file (&rest _other)
   "Run a `load-file' check on the current buffer."
