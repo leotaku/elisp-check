@@ -9,11 +9,12 @@ Provides a zero-config CI solution for Emacs Lisp packages.
 Most Emacs packages currently use either no or an ad-hoc script based CI setup.
 This GitHub Action aims to change that.
 
-Adding this Action to your Emacs package immediately provides you with a default suite of code style checks that are required to get your package accepted into MELPA.
-
-Using only one additional line of YAML, you can also run all of your ERT tests on GitHub Actions.
+Adding this Action to your Emacs package repository immediately provides you with a default suite of code style checks that are required to get your package accepted into MELPA.
+Using only one additional line of YAML, you can also run your ERT tests on GitHub Actions.
 
 See the [actions tab](https://github.com/leotaku/elisp-check-action/actions) for runs of this action! 🚀
+
+See the [COMPARISON.md](/COMPARISON.md) file for a more thorough comparison with other solutions for Emacs Lisp CI. 🛒
 
 ### Supported Checks
 
