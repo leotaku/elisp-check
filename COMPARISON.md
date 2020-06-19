@@ -10,60 +10,68 @@ If you think some project deserves a spot, please open a issue or pull request.
 
 ## Summary
 
-Here is a summary of reasons you may, or may not, want to use elisp-check.
+Here is a summary of reasons you may, or may not, want to use `elisp-check`.
 
-### Advantages of elisp-check
+### Advantages of `elisp-check`
 
 * Very little setup required, only a single YAML file
-* Integrates well with GitHub pull requests
+* Integration with GitHub Actions, which provides free CI for open source projects
+* Code annotations, which also integrate with GitHub pull requests
 * Large range of supported Emacs versions (24.1 and up)
 * All checks can be run locally using a reasonably intuitive API (`elisp-check-run`)
 * No dependencies outside of a supported Emacs versions
 
-### Disadvantages of elisp-check
+### Disadvantages of `elisp-check`
 
-* Currently only GitHub Actions is supported as a CI provider
-* Some more obscure linters and test frameworks are unsupported
+* Currently only GitHub Actions is supported as a CI service
+* Some lesser-used linters and test frameworks are currently unsupported
+  * [check-declare](https://www.gnu.org/software/emacs/manual/html_node/elisp/Declaring-Functions.html) :: Correct `declare-function` statements
+  * [indent-lint](https://github.com/conao3/indent-lint.el) :: Indentation best practices
+  * [relint](https://github.com/mattiase/relint) :: REGEXP best practices
+  * [Elsa](https://github.com/emacs-elsa/Elsa) :: Emacs Lisp static analysis
+  * [buttercup](https://github.com/jorgenschaefer/emacs-buttercup) :: Alternative test framework
 * Does not (and likely will never) support Emacs versions lower than 24
 
-If you are interested in support for an alternative CI provider, please open an issue.
-If possible, also include links to its documentation, especially relating to API support for code annotations.
+If you are interested in support for an alternative CI service, please open an issue.
+If possible, also include links to documentation, especially relating to API support for code annotations.
 
-If you are interested in support for an alternative linter or test frameworks, please open an issue.
-If possible, also include links to its documentation.
+If you are interested in support for an alternative linter or test framework, please open an issue.
+If possible, also include links to documentation.
 
-## Comparison to [melpazoid](https://github.com/riscy/melpazoid)
+## Comparison to [`melpazoid`](https://github.com/riscy/melpazoid)
 
-### Advantages of melpazoid
+### Advantages of `melpazoid`
 
 * Uses MELPA-compatible recipes to setup packages
-* Implements some custom checks not supported by elisp-check
+* Implements some custom checks not supported by `elisp-check`
 * Implements a license checker
 * Can be run continuously to check many recipes
 
 Some of these features might especially be interesting to people who review MELPA pull requests, as melpazoid has specifically been built to support their work.
 
-### Disadvantages of melpazoid
+### Disadvantages of `melpazoid`
 
 * Does not seem to support some new versions of Emacs (builds crash)
 * Reports can be very hard to read and understand
-* No integration with any CI service (manual setup is needed)
+* Some lesser-used linters are unsupported
+* No support for any test frameworks or running tests
+* No integration with any CI service (manual setup is documented)
 * No code annotations
 * Depends on Python 3.x
 
-## Comparison to [makem.sh](https://github.com/alphapapa/makem.sh)
+## Comparison to [`makem.sh`](https://github.com/alphapapa/makem.sh)
 
 The makem.sh project also includes a [comparison section](https://github.com/alphapapa/makem.sh#comparisons) in its README.
 
-### Advantages of makem.sh
+### Advantages of `makem.sh`
 
-* Supports some additional checks not supported by elisp-check
+* Supports quite a few additional checks not supported by `elisp-check`
 * Included Makefile makes it easy to run tests locally
 
-### Disadvantages of makem.sh
+### Disadvantages of `makem.sh`
 
 * Requires adding a >1000 line shell script and Makefile to your project
-* No integration with any CI service (manual setup is needed)
+* No integration with any CI service (manual setup is documented)
 * No code annotations
 * Depends on Bash and (optionally) Make
 
@@ -72,25 +80,41 @@ The makem.sh project also includes a [comparison section](https://github.com/alp
 ### Advantages of Cask
 
 * Well known in the Emacs community
-* Offers many additional features apart from CI
+* Offers many additional features for Emacs Lisp projects
 
 ### Disadvantages of Cask
 
 * Requires quite a bit of configuration by the package author
-* Does not natively support any linters, so manual configuration is required
+* No native support for any linters or test frameworks (manual setup is needed)
 * No integration with any CI service (manual setup is needed)
 * No code annotations
 * Depends on Python 3.x
+
+## Comparison to [Eldev](https://github.com/doublep/eldev)
+
+### Advantages of Eldev
+
+* Offers many additional features for Emacs Lisp projects
+* Offers support for code coverage reports
+* Allows extending core functionality for highly specialized setups
+* No dependencies outside of a supported Emacs versions
+
+### Disadvantages of Eldev
+
+* Requires quite a bit of configuration by the package author
+* No integration with any CI service (manual setup is documented)
+* No code annotations
 
 ## Comparison to a manual setup
 
 ### Advantages of a manual setup
 
-* Allows configuring your CI with the full power of a turing-complete programming language
+* Allows configuring CI with the full power of a turing-complete programming language
+* If simple, adds no external dependencies to your project
 
 ### Disadvantages of a manual setup
 
-* Requires huge amount of code and configuration by the package author
+* Potentially requires huge amount of code and configuration by the package author
 
 ---
 
