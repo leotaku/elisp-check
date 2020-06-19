@@ -244,7 +244,7 @@ When LEVEL is error, also set `elisp-check-has-failed'."
 (defun elisp-check-parse (regexp &optional handler)
   "Parse the current buffer for REGEXP.
 HANDLER is then called for every match with the all captures as
-its arguments."
+its arguments.  The default value for HANDLER is `concat'."
   (let ((handler (or handler #'concat))
         (result '()))
     (save-excursion
@@ -258,7 +258,7 @@ its arguments."
         result))))
 
 (defun elisp-check-listify (val)
-  "Return VAL if list, \(list VAL) otherwise."
+  "Return VAL if list, (list VAL) otherwise."
   (if (listp val)
       val
     (list val)))
