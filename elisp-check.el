@@ -56,14 +56,14 @@
      :require ert))
   "Alist from check names to definitions.")
 
-(defvar elisp-check-has-failed nil
-  "Variable indicting whether any checks have failed.")
-
 (defvar elisp-check-ignore-warnings nil
   "Variable indicting whether warnings should be ignored.")
 
 (defvar elisp-check-warnings-as-errors nil
   "Variable indicting whether to treat warnings as errors.")
+
+(defvar elisp-check-has-failed nil
+  "Variable indicting whether any checks have failed.")
 
 ;;;; Implementation
 
