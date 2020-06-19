@@ -29,8 +29,9 @@ See the [COMPARISON.md](/COMPARISON.md) file for a more thorough comparison with
 
 * Require zero configuration for great results
 * Support accepted Emacs Lisp coding standards and test frameworks
-* Support older Emacs versions (24.1 and up)
 * Expose helpful code annotations
+* Support running checks on your local machine (`elisp-check-run`)
+* Support older Emacs versions (24.1 and up)
 
 ### Non-Features
 
@@ -82,6 +83,12 @@ The above yaml code block shows the default configuration values for this GitHub
 | `warnings_as_errors` | Whether to treat warnings as errors | Boolean                              |
 
 Users are encouraged to make use of [GitHub Actions matrix feature](https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstrategy) to run different checks, check different entry files and test compatibility with different versions of Emacs.
+
+### Running checks locally
+
+It is entirely possible to use your preferred Emacs package manager, or simply `load-file`, to load `elisp-check.el` into your local Emacs instance.
+The function `elisp-check-run` may then be used to run any supported check locally.
+Errors and warnings are emitted to the Emacs `*Messages*` buffer, so both batch and interactive usage is supported.
 
 ---
 
