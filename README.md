@@ -1,6 +1,6 @@
 # A GitHub Action for Emacs Lisp CI 📜
 
-[![GitHub License](https://img.shields.io/github/license/leotaku/elisp-check?color=darkviolet&logo=spdx&logoColor=white&style=flat-square)](https://spdx.org/licenses/GPL-3.0-or-later.html)
+[![GitHub License](https://img.shields.io/github/license/leotaku/elisp-check?color=blueviolet&logo=spdx&logoColor=white&style=flat-square)](https://spdx.org/licenses/GPL-3.0-or-later.html)
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/leotaku/elisp-check/test?logo=github&style=flat-square)](https://github.com/leotaku/elisp-check/actions)
 [![GitHub Release](https://img.shields.io/github/v/release/leotaku/elisp-check?include_prereleases&sort=semver&style=flat-square)](https://github.com/leotaku/elisp-check/releases)
 
