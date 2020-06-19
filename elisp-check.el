@@ -100,6 +100,7 @@ dependencies using the package.el package manager."
   "Apply the given CHECK-FUNS to the given BUFFERS."
   (dolist (buffer buffers)
     (with-current-buffer buffer
+      (elisp-check-debug "Checking file: %s" (buffer-file-name))
       (let ((other (elisp-check--get-requires)))
         (dolist (check check-funs)
           (elisp-check-debug "Running check: %s" check)
