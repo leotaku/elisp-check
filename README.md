@@ -64,7 +64,7 @@ For an example of real-life usage, see the [Actions config for my `theist-mode` 
 
 ## Advanced usage
 
-```yaml
+``` yaml
 uses: leotaku/elisp-check@master
 with:
   check: melpa
