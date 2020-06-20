@@ -12,7 +12,7 @@ This GitHub Action aims to change that.
 Adding this Action to your Emacs package repository immediately provides you with a default suite of code style checks that are required to get your package accepted into MELPA.
 Using only one additional line of YAML, you can also run your ERT tests on GitHub Actions.
 
-See the [actions tab](https://github.com/leotaku/elisp-check-action/actions) for runs of this action! 🚀
+See the [Actions tab](https://github.com/leotaku/elisp-check-action/actions) for runs of this Action! 🚀
 
 See the [COMPARISON.md](/COMPARISON.md) file for a more thorough comparison with other solutions for Emacs Lisp CI. 🛒
 
@@ -57,7 +57,7 @@ with:
   file: test-file.el
 ```
 
-Note that this action does not install a suitable `emacs` executable by itself.
+Note that this Action does not install a suitable `emacs` executable by itself.
 For this purpose, I recommend using Steve Purcell's excellent [setup-emacs](https://github.com/purcell/setup-emacs/blob/master/README.md) GitHub Action.
 
 For an example of real-life usage, see the [Actions config for my `theist-mode` package](https://github.com/leotaku/theist-mode/blob/master/.github/workflows/check.yml).
