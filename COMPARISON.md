@@ -55,7 +55,7 @@ Some of these features might especially be interesting to people who review MELP
 * Reports can be very hard to read and understand
 * Some lesser-used linters are unsupported
 * No support for any test frameworks or running tests
-* No integration with any CI service (manual setup is documented)
+* No automatic integration with any CI service (manual setup is documented)
 * No code annotations
 * Depends on Python 3.x
 
@@ -66,12 +66,13 @@ The makem.sh project also includes a [comparison section](https://github.com/alp
 ### Advantages of `makem.sh`
 
 * Supports quite a few additional checks not supported by `elisp-check`
-* Included Makefile makes it easy to run tests locally
+* Included script or Makefile make it easy to run tests locally
+* Terminal output is color-coded which improves readability
 
 ### Disadvantages of `makem.sh`
 
-* Requires adding a >1000 line shell script and Makefile to your project
-* No integration with any CI service (manual setup is documented)
+* Recommends adding a >1000 line shell script and Makefile to your project
+* No automatic integration with any CI service (manual setup is documented)
 * No code annotations
 * Depends on Bash and (optionally) Make
 
@@ -86,7 +87,7 @@ The makem.sh project also includes a [comparison section](https://github.com/alp
 
 * Requires quite a bit of configuration by the package author
 * No native support for any linters or test frameworks (manual setup is needed)
-* No integration with any CI service (manual setup is needed)
+* No automatic integration with any CI service (manual setup is needed)
 * No code annotations
 * Depends on Python 3.x
 
@@ -102,7 +103,7 @@ The makem.sh project also includes a [comparison section](https://github.com/alp
 ### Disadvantages of Eldev
 
 * Requires quite a bit of configuration by the package author
-* No integration with any CI service (manual setup is documented)
+* No automatic integration with any CI service (manual setup is documented)
 * No code annotations
 
 ## Comparison to a manual setup
