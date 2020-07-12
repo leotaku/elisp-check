@@ -171,10 +171,18 @@ Only returns buffers for files that match PREFIX."
 
 (defun elisp-check--install-package-requires (&rest _other)
   "Install packages for Package-Requires for current buffer."
-  (let* ((parsed (elisp-check-parse ";; Package-Requires: \\((.*)\\)"))
-         (conses (apply #'append (mapcar #'read parsed)))
-         (pkgs (delq 'emacs (mapcar #'car conses))))
+  (let ((pkgs (elisp-check--get-package-requires)))
     (elisp-check--install-packages pkgs)))
+
+(defun elisp-check--get-package-requires ()
+  "Get list of packages for Package-Requires for current buffer."
+  (condition-case _err
+      (let* ((parsed (elisp-check-parse "^;; Package-Requires: \\(.*\\)"))
+             (conses (apply #'append (mapcar #'read parsed))))
+        (delq 'emacs (mapcar #'car conses)))
+    (error (elisp-check-error
+            "The `Package-Requires' section for buffer `%s' is malformed"
+            (current-buffer)))))
 
 (defun elisp-check--install-packages (pkgs)
   "Install PKGS using the package.el package manager."
