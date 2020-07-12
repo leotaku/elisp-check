@@ -45,6 +45,8 @@ If possible, also include links to documentation.
 * Uses MELPA-compatible recipes to setup packages
 * Implements some custom checks not supported by `elisp-check`
 * Implements a license checker
+* Includes sample configurations for GitHub Actions and Travis CI
+* Includes a Dockerfile
 * Can be run continuously to check many recipes
 
 Some of these features might especially be interesting to people who review MELPA pull requests, as melpazoid has specifically been built to support their work.
@@ -66,7 +68,8 @@ The makem.sh project also includes a [comparison section](https://github.com/alp
 ### Advantages of `makem.sh`
 
 * Supports quite a few additional checks not supported by `elisp-check`
-* Included script or Makefile make it easy to run tests locally
+* Includes a script and Makefile for running tests locally
+* Includes a sample configuration for GitHub Actions
 * Terminal output is color-coded which improves readability
 
 ### Disadvantages of `makem.sh`
@@ -74,7 +77,7 @@ The makem.sh project also includes a [comparison section](https://github.com/alp
 * Recommends adding a >1000 line shell script and Makefile to your project
 * No automatic integration with any CI service (manual setup is documented)
 * No code annotations
-* Depends on Bash and (optionally) Make
+* Depends on Bash (Make is optional)
 
 ## Comparison to [Cask](https://github.com/cask/cask)
 
