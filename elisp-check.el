@@ -67,26 +67,29 @@
 
 ;;;; Implementation
 
-(defun elisp-check-run (check file-or-glob &optional install)
-  "Run the given CHECK with entry file FILE-OR-GLOB.
-When INSTALL is non-nil, also install all test and file
-dependencies using the package.el package manager."
+(defun elisp-check-run (name file-or-glob &optional install)
+  "Run the check named NAME on entry file FILE-OR-GLOB.
+
+When INSTALL is non-nil, also install all check and file
+dependencies using the package.el package manager.
+
+See `elisp-check-alist' for a list of valid check names."
   ;; Reset state
   (setq elisp-check-has-failed nil)
   ;; Install packages
   (when install
-    (elisp-check--install-setup check))
+    (elisp-check--install-setup name))
   ;; Add repository to load-path
   (add-to-list 'load-path default-directory)
   ;; Require all explicit dependencies
-  (mapc #'require (elisp-check--get-props check :require))
+  (mapc #'require (elisp-check--get-props name :require))
   ;; Run checker functions
   (let ((buffers (elisp-check--get-buffers file-or-glob))
-        (check-funs (elisp-check--get-props check :function)))
+        (check-funs (elisp-check--get-props name :function)))
     (unless buffers
       (elisp-check-error "File `%s' does not exist" file-or-glob))
     (unless check-funs
-      (elisp-check-error "Check `%s' does not exist" check))
+      (elisp-check-error "Check `%s' does not exist" name))
     (if install
         (elisp-check--apply
          buffers
