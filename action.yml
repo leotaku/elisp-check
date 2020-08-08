@@ -26,14 +26,15 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - run: emacs
+    - shell: 'bash'
+      run: >-
+        emacs
         --no-site-file --batch
         --eval (setq debug-on-error t)
         --load elisp-check.el
         --eval (setq elisp-check-ignore-warnings ${{ inputs.ignore_warnings }})
         --eval (setq elisp-check-warnings-as-errors ${{ inputs.warnings_as_errors }})
         --eval (elisp-check-run "${{ inputs.check }}" "${{ inputs.file }}" t)
-      shell: 'bash'
 
 branding:
   icon: 'align-left'
