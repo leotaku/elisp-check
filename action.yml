@@ -26,8 +26,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - run: >-
-        emacs
+    - run: emacs
         --no-site-file --batch
         --eval (setq debug-on-error t)
         --load elisp-check.el
