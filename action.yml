@@ -27,14 +27,7 @@ runs:
   using: 'composite'
   steps:
     - shell: 'bash'
-      run: >-
-        emacs
-        --no-site-file --batch
-        --eval (setq debug-on-error t)
-        --load elisp-check.el
-        --eval (setq elisp-check-ignore-warnings ${{ inputs.ignore_warnings }})
-        --eval (setq elisp-check-warnings-as-errors ${{ inputs.warnings_as_errors }})
-        --eval (elisp-check-run "${{ inputs.check }}" "${{ inputs.file }}" t)
+      run: emacs --no-site-file --batch --eval '(setq debug-on-error t)' --load elisp-check.el --eval '(setq elisp-check-ignore-warnings ${{ inputs.ignore_warnings }})' --eval '(setq elisp-check-warnings-as-errors ${{ inputs.warnings_as_errors }})' --eval '(elisp-check-run "${{ inputs.check }}" "${{ inputs.file }}" t)'
 
 branding:
   icon: 'align-left'
