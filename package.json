@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/leotaku/emacs-action#readme",
   "dependencies": {
-    "@actions/core": "^1.2.4",
+    "@actions/core": "^1.2.5",
     "@actions/exec": "^1.0.4"
   },
   "devDependencies": {}
