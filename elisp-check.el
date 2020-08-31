@@ -32,6 +32,9 @@
 ;;
 ;; Refer to the repository README.md for documentation.
 
+(eval-when-compile
+  (require 'cl-lib))
+
 ;;; Code:
 
 ;;;; Variables
