@@ -167,8 +167,8 @@ Only returns buffers for files that match PREFIX."
 (defun elisp-check--install-setup (check)
   "Setup package.el and install packages for the given CHECK."
   (package-initialize)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
   (package-refresh-contents)
   (elisp-check--install-packages (elisp-check--get-props check :package)))
 
