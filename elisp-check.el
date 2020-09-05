@@ -55,8 +55,7 @@
      :require checkdoc)
     ("package-lint"
      :function elisp-check-package-lint
-     :require package-lint
-     :package package-lint)
+     :require package-lint)
     ("ert"
      :function elisp-check-ert
      :require ert))
