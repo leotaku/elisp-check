@@ -17,6 +17,8 @@
 (package-refresh-contents)
 (package-install 'package-lint)
 
+(defun elisp-check-run (&rest _))
+
 (provide 'elisp-check)
 
 ;;; elisp-check.el ends here
