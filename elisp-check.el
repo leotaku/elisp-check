@@ -34,6 +34,12 @@
 
 ;;; Code:
 
+(package-initialize)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
+(package-refresh-contents)
+(package-install 'package-lint)
+
 ;;;; Variables
 
 (defconst elisp-check-alist
