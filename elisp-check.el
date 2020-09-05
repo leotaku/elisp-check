@@ -16,6 +16,7 @@
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
 (package-refresh-contents)
 (package-install 'package-lint)
+(require 'package-lint)
 
 (defun elisp-check-run (&rest _))
 
