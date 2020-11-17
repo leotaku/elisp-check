@@ -1,6 +1,6 @@
 ;;; elisp-check.el --- Run elisp checks for CI  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2019-2019 Leo Gaskin
+;; Copyright (C) 2019-2020 Leo Gaskin
 
 ;; Author: Leo Gaskin <leo.gaskin@brg-feldkirchen.at>
 ;; Created: 26 May 2019
