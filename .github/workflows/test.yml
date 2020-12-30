@@ -8,7 +8,7 @@ on:
       - 'releases/*'
 
 jobs:
-  test-newer:
+  test-mixed:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -23,10 +23,15 @@ jobs:
           - 26.2
           - 26.3
           - 27.1
+          - snapshot
         ignore_warnings:
           - true
+        check:
+          - melpa
+          - package-lint
         include:
           - emacs_version: snapshot
+            check: melpa
             ignore_warnings: false
     steps:
     - uses: actions/checkout@v2
@@ -36,9 +41,9 @@ jobs:
     - uses: ./
       with:
         file: elisp-check.el
-        check: melpa
+        check: ${{ matrix.check }}
         ignore_warnings: ${{ matrix.ignore_warnings }}
-  test-older:
+  test-builtin:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -47,6 +52,16 @@ jobs:
           - 24.1
           - 24.2
           - 24.3
+          - 24.4
+          - 24.5
+          - 25.1
+          - 25.2
+          - 25.3
+          - 26.1
+          - 26.2
+          - 26.3
+          - 27.1
+          - snapshot
         ignore_warnings:
           - true
         check:
