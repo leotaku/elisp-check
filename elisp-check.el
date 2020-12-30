@@ -302,7 +302,7 @@ order to hook `byte-compile-file' into the CI message mechanism."
   (save-excursion
     (goto-char pos)
     (elisp-check-emit
-     (if (eq level :warning) 'warning 'error)
+     (if (eq level :error) 'error 'warning)
      msg
      byte-compile-current-file
      (line-number-at-pos)
