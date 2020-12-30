@@ -25,7 +25,7 @@ async function main() {
     );
   }
   catch (error) {
-    core.setFailed(error.message);
+    process.exitCode = 1
   }
 }
 
