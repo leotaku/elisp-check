@@ -6,7 +6,7 @@
 ;; Created: 26 May 2019
 ;; Homepage: https://github.com/leotaku/elisp-check
 ;; Keywords: elisp, lint, lisp, test, tools
-;; Package-Version: 1.0.0
+;; Package-Version: 1.1.0
 ;; Package-Requires: ((emacs "24.1"))
 
 ;; This file is not part of GNU Emacs.
