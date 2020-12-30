@@ -8,15 +8,12 @@ on:
       - 'releases/*'
 
 jobs:
-  test-on-self:
+  test-newer:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         emacs_version:
-          - 24.1
-          - 24.2
-          - 24.3
           - 24.4
           - 24.5
           - 25.1
@@ -40,4 +37,29 @@ jobs:
       with:
         file: elisp-check.el
         check: melpa
+        ignore_warnings: ${{ matrix.ignore_warnings }}
+  test-older:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        emacs_version:
+          - 24.1
+          - 24.2
+          - 24.3
+        ignore_warnings:
+          - true
+        check:
+          - load-file
+          - byte-compile
+          - checkdoc
+    steps:
+    - uses: actions/checkout@v2
+    - uses: purcell/setup-emacs@master
+      with:
+        version: ${{ matrix.emacs_version }}
+    - uses: ./
+      with:
+        file: elisp-check.el
+        check: ${{ matrix.check }}
         ignore_warnings: ${{ matrix.ignore_warnings }}
