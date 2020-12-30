@@ -31,7 +31,7 @@ See the [COMPARISON.md](/COMPARISON.md) file for a more thorough comparison with
 * Support accepted Emacs Lisp coding standards and test frameworks
 * Expose helpful code annotations
 * Support running checks on your local machine (`elisp-check-run`)
-* Support older Emacs versions (24.1 and up)
+* Support older Emacs versions (24.4 and up, 24.1 and up without package-lint)
 
 ### Non-Features
 
