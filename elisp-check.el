@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2019-2021 Leo Gaskin
 
-;; Author: Leo Gaskin <leo.gaskin@brg-feldkirchen.at>
+;; Author: Leo Gaskin <leo.gaskin@le0.gs>
 ;; Created: 26 May 2019
 ;; Homepage: https://github.com/leotaku/elisp-check
 ;; Keywords: elisp, lint, lisp, test, tools

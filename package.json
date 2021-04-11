@@ -15,7 +15,7 @@
     "linting",
     "testing"
   ],
-  "author": "Leo Gaskin <leo.gaskin@brg-feldkirchen.at>",
+  "author": "Leo Gaskin <leo.gaskin@le0.gs>",
   "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/leotaku/emacs-action/issues"
