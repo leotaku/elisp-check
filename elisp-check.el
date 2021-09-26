@@ -168,7 +168,6 @@ Only returns buffers for files that match PREFIX."
   "Setup package.el and install packages for the given CHECK."
   (package-initialize)
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
   (package-refresh-contents)
   (elisp-check--install-packages (elisp-check--get-props check :package)))
 
