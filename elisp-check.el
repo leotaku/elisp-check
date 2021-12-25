@@ -132,30 +132,37 @@ File globbing is supported."
                  (plist-get it prop)))))
     (apply #'append (mapcar fun checks))))
 
-(defun elisp-check--get-requires (&optional prefix)
-  "Return local files for `require' statements in the current buffer.
+(defun elisp-check--get-requires (&optional prefix known-buffers)
+  "Return file buffers for local `require' statements in the current buffer.
 
-Only files in the same directory with the same file prefix are
-returned.  This also walks the required files for more require
-statements.
+Only return files in the same directory with the same PREFIX.
+Then walk the resulting buffers for more `require' statements.
+If PREFIX is not given, extract it from the current file name.
 
-If PREFIX is not given, extract it from the current file name."
+When a buffer is a member of KNOWN-BUFFERS, do not return or
+search it for further `require' statements."
   (let* ((file (file-name-nondirectory (buffer-file-name)))
          (file-prefix (file-name-sans-extension file))
          (prefix (or prefix file-prefix))
          (requires (elisp-check-parse "^[ ]*(require '\\(.*?\\))"))
-         (fun (lambda (req) (elisp-check--get-require req prefix))))
+         (fun (lambda (req)
+                (elisp-check--get-require
+                 req prefix
+                 (cons (current-buffer) known-buffers)))))
     (delete-dups (apply #'append (mapcar fun requires)))))
 
-(defun elisp-check--get-require (name prefix)
-  "Return buffers for file with package NAME.
-Only returns buffers for files that match PREFIX."
+(defun elisp-check--get-require (name prefix &optional known-buffers)
+  "Return required buffers for file with package NAME.
+
+See documentation of `elisp-check--get-requires' for
+documentation on the usage of PREFIX and KNOWN-BUFFERS."
   (let ((file (concat name ".el")))
     (when (file-exists-p file)
       (if (string-prefix-p prefix name)
           (with-current-buffer (find-file-noselect file)
-            (cons (current-buffer)
-                  (elisp-check--get-requires prefix)))
+            (unless (member (current-buffer) known-buffers)
+              (cons (current-buffer)
+                    (elisp-check--get-requires prefix known-buffers))))
         (prog1 nil
           (elisp-check-emit
            'warning
