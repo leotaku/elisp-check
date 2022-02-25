@@ -320,7 +320,7 @@ order to hook `byte-compile-file' into the CI message mechanism."
 ;; for older versions of Emacs.
 
 (defadvice byte-compile-log-warning
-    (around elisp-check--advice-byte-compile-log)
+    (around elisp-check--advice-byte-compile-log disable)
   "Emit byte compile errors and warnings as CI messages."
   (elisp-check--byte-compile-emit
    string
@@ -328,8 +328,15 @@ order to hook `byte-compile-file' into the CI message mechanism."
    fill
    level))
 
+;; Only enable the advice to `byte-compile-log-warning' when the
+;; variable `byte-compile-log-warning-function' is not available,
+;; otherwise use the proper interface.
+
 (eval-after-load 'bytecomp
-  '(ad-deactivate 'byte-compile-log-warning))
+  '(if (boundp 'byte-compile-log-warning-function)
+       (setq byte-compile-log-warning-function #'elisp-check--byte-compile-emit)
+     (ad-enable-advice 'byte-compile-log-warning 'around 'elisp-check--advice-byte-compile-log)
+     (ad-activate 'byte-compile-log-warning)))
 
 (defun elisp-check-package-lint (&rest other)
   "Run a `package-lint-buffer' check on the current and OTHER buffers."
