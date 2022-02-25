@@ -142,8 +142,7 @@ If PREFIX is not given, extract it from the current file name.
 When a buffer is a member of KNOWN-BUFFERS, do not return or
 search it for further `require' statements."
   (let* ((file (file-name-nondirectory (buffer-file-name)))
-         (file-prefix (file-name-sans-extension file))
-         (prefix (or prefix file-prefix))
+         (prefix (or prefix (file-name-sans-extension file)))
          (requires (elisp-check-parse "^[ ]*(require '\\(.*?\\))"))
          (fun (lambda (req)
                 (elisp-check--get-require
