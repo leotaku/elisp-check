@@ -328,6 +328,10 @@ order to hook `byte-compile-file' into the CI message mechanism."
    fill
    level))
 
+;; Only enable the advice to `byte-compile-log-warning' when the
+;; variable `byte-compile-log-warning-function' is not available,
+;; otherwise use the proper interface.
+
 (eval-after-load 'bytecomp
   '(if (boundp 'byte-compile-log-warning-function)
        (setq byte-compile-log-warning-function #'elisp-check--byte-compile-emit)
