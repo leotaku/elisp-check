@@ -198,10 +198,10 @@ documentation on the usage of PREFIX and KNOWN-BUFFERS."
   (let ((errors '()))
     (dolist (pkg pkgs)
       (elisp-check-debug "Installing: %s" pkg)
-      (condition-case err
+      (condition-case error
           (package-install pkg)
         (error
-         (push (elisp-check-format-error err) errors))))
+         (push (elisp-check-format-error error) errors))))
     (when errors
       (elisp-check-error
        "Packages could not be installed:\n    %s"
@@ -209,16 +209,16 @@ documentation on the usage of PREFIX and KNOWN-BUFFERS."
 
 ;;;; Standard library
 
-(defun elisp-check-emit (level msg &optional file line col)
+(defun elisp-check-emit (level message &optional file line column)
   "Emit a CI message for the given arguments.
 
-MSG is the message text, while LEVEL is a symbol corresponding to
+MESSAGE is the message text, while LEVEL is a symbol corresponding to
 a urgency level supported by the CI environment, such as warning
-or error.  FILE, LINE and COL may be given to associate the
+or error.  FILE, LINE and COLUMN may be given to associate the
 message with a file.
 
 When LEVEL is error, also set `elisp-check-has-failed'."
-  (let* ((msg (replace-regexp-in-string "\n" "\\\\n" msg))
+  (let* ((message (replace-regexp-in-string "\n" "\\\\n" message))
          (is-error (eq level 'error))
          (is-warning (eq level 'warning))
          (is-debug (eq level 'debug))
@@ -226,8 +226,8 @@ When LEVEL is error, also set `elisp-check-has-failed'."
                 "::%s "
                 (when file (format "file=%s," file))
                 (when line (format "line=%s," line))
-                (when col (format "col=%s," col))
-                (format "::%s" msg))))
+                (when column (format "col=%s," column))
+                (format "::%s" message))))
     (cond
      ((and is-warning elisp-check-ignore-warnings))
      ((or is-error (and is-warning elisp-check-warnings-as-errors))
@@ -248,15 +248,15 @@ When LEVEL is error, also set `elisp-check-has-failed'."
     (elisp-check-emit 'error format)
     (error format)))
 
-(defun elisp-check-format-error (err)
-  "Format the error ERR in a visually pleasing manner."
-  (let* ((symbol (car err))
-         (data (cdr err))
-         (msg (get symbol 'error-message))
+(defun elisp-check-format-error (error)
+  "Format the error ERROR in a visually pleasing manner."
+  (let* ((symbol (car error))
+         (data (cdr error))
+         (message (get symbol 'error-message))
          (data-string (mapconcat #'prin1-to-string data ", ")))
     (if (eq symbol 'error)
         data-string
-      (format "%s: %s" msg data-string))))
+      (format "%s: %s" message data-string))))
 
 (defun elisp-check-parse (regexp &optional handler)
   "Parse the current buffer for REGEXP.
@@ -284,11 +284,11 @@ its arguments.  The default value for HANDLER is `concat'."
 
 (defun elisp-check-load-file (&rest _other)
   "Run a `load-file' check on the current buffer."
-  (condition-case err
+  (condition-case error
       (load-file (buffer-file-name))
     (error (elisp-check-emit
             'error
-            (elisp-check-format-error err)))))
+            (elisp-check-format-error error)))))
 
 (defun elisp-check-byte-compile (&rest other)
   "Run a `byte-compile-file' check on the current and OTHER buffers."
@@ -301,15 +301,15 @@ its arguments.  The default value for HANDLER is `concat'."
       (byte-compile-file (buffer-file-name buffer))))
   (ad-deactivate 'byte-compile-log-warning))
 
-(defun elisp-check--byte-compile-emit (msg &optional pos _fill level)
-  "Emit a CI message for MSG, POS and LEVEL.
+(defun elisp-check--byte-compile-emit (message &optional pos _fill level)
+  "Emit a CI message for MESSAGE, POS and LEVEL.
 This should be bound to `byte-compile-log-warning-function' in
 order to hook `byte-compile-file' into the CI message mechanism."
   (save-excursion
     (goto-char pos)
     (elisp-check-emit
      (if (eq level :error) 'error 'warning)
-     msg
+     message
      byte-compile-current-file
      (line-number-at-pos)
      (current-column))))
@@ -349,11 +349,11 @@ order to hook `byte-compile-file' into the CI message mechanism."
   "Run a `package-lint-buffer' check on the current buffer."
   (dolist (lint (package-lint-buffer))
     (let ((level (nth 2 lint))
-          (msg (nth 3 lint))
+          (message (nth 3 lint))
           (file (buffer-file-name))
           (line (nth 0 lint))
-          (col (nth 1 lint)))
-      (elisp-check-emit level msg file line col))))
+          (column (nth 1 lint)))
+      (elisp-check-emit level message file line column))))
 
 (defun elisp-check-checkdoc (&rest other)
   "Run a `checkdoc' check on the current and OTHER buffers."
@@ -368,8 +368,8 @@ order to hook `byte-compile-file' into the CI message mechanism."
     (with-current-buffer checkdoc-diagnostic-buffer
       (elisp-check-parse
        "\\(.*\\):\\(.*\\): \\(.*\\)"
-       (lambda (file line msg)
-         (elisp-check-emit 'warning msg file line)))
+       (lambda (file line message)
+         (elisp-check-emit 'warning message file line)))
       (unless noninteractive
         (kill-buffer-and-window)))))
 
