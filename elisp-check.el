@@ -144,9 +144,9 @@ search it for further `require' statements."
   (let* ((file (file-name-nondirectory (buffer-file-name)))
          (prefix (or prefix (file-name-sans-extension file)))
          (requires (elisp-check-parse "^[ ]*(require '\\(.*?\\))"))
-         (fun (lambda (req)
+         (fun (lambda (required)
                 (elisp-check--get-require
-                 req prefix
+                 required prefix
                  (cons (current-buffer) known-buffers)))))
     (delete-dups (apply #'append (mapcar fun requires)))))
 
@@ -185,7 +185,7 @@ documentation on the usage of PREFIX and KNOWN-BUFFERS."
 
 (defun elisp-check--get-package-requires ()
   "Get list of packages for Package-Requires for current buffer."
-  (condition-case _err
+  (condition-case _error
       (let* ((parsed (elisp-check-parse "^;; Package-Requires: \\(.*\\)"))
              (conses (apply #'append (mapcar #'read parsed))))
         (delq 'emacs (mapcar #'car conses)))
@@ -193,13 +193,13 @@ documentation on the usage of PREFIX and KNOWN-BUFFERS."
             "The `Package-Requires' section for buffer `%s' is malformed"
             (current-buffer)))))
 
-(defun elisp-check--install-packages (pkgs)
+(defun elisp-check--install-packages (packages)
   "Install PKGS using the package.el package manager."
   (let ((errors '()))
-    (dolist (pkg pkgs)
-      (elisp-check-debug "Installing: %s" pkg)
+    (dolist (package packages)
+      (elisp-check-debug "Installing: %s" package)
       (condition-case error
-          (package-install pkg)
+          (package-install package)
         (error
          (push (elisp-check-format-error error) errors))))
     (when errors
@@ -274,11 +274,11 @@ its arguments.  The default value for HANDLER is `concat'."
             (push (apply handler captures) result)))
         result))))
 
-(defun elisp-check-listify (val)
+(defun elisp-check-listify (value)
   "Return VAL if list, (list VAL) otherwise."
-  (if (listp val)
-      val
-    (list val)))
+  (if (listp value)
+      value
+    (list value)))
 
 ;;;; Checkers
 
