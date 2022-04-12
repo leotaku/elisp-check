@@ -19,6 +19,7 @@ See the [COMPARISON.md](/COMPARISON.md) file for a more thorough comparison with
 ### Supported Checks
 
 * [melpa](https://github.com/melpa/melpa/blob/master/CONTRIBUTING.org) :: Most checks required for MELPA
+    * Contains the checks load-file, byte-compile, package-lint and checkdoc
 * [load-file](https://www.gnu.org/software/emacs/manual/html_node/eintr/Loading-Files.html) :: Load files into Emacs
 * [byte-compile](https://www.gnu.org/software/emacs/manual/html_node/elisp/Byte-Compilation.html) :: Byte-compile files
 * [checkdoc](https://www.gnu.org/software/emacs/manual/html_node/elisp/Documentation-Tips.html#Documentation-Tips) :: Check documentation style
