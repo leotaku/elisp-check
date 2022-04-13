@@ -10,7 +10,7 @@ on:
     - cron: '0 12 * * *'
 
 jobs:
-  test-mixed:
+  test-melpa:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -25,12 +25,10 @@ jobs:
           - 26.2
           - 26.3
           - 27.1
-          - snapshot
         ignore_warnings:
           - true
         check:
           - melpa
-          - package-lint
         include:
           - emacs_version: snapshot
             check: melpa
