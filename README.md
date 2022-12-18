@@ -1,7 +1,7 @@
 # A GitHub Action for Emacs Lisp CI 📜
 
 [![GitHub License](https://img.shields.io/github/license/leotaku/elisp-check?color=blueviolet&logo=spdx&logoColor=white&style=flat-square)](https://spdx.org/licenses/GPL-3.0-or-later.html)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/leotaku/elisp-check/test?logo=github&style=flat-square)](https://github.com/leotaku/elisp-check/actions)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/leotaku/elisp-check/test.yml?branch=master&logo&style=flat-square)](https://github.com/leotaku/elisp-check/actions)
 [![GitHub Release](https://img.shields.io/github/v/release/leotaku/elisp-check?include_prereleases&sort=semver&style=flat-square)](https://github.com/leotaku/elisp-check/releases)
 
 Provides a zero-config CI solution for Emacs Lisp packages.
