@@ -1,7 +1,7 @@
 {
   "name": "elisp-check",
   "version": "1.1.0",
-  "description": "GitHub Actions for Emacs lisp checks",
+  "description": "GitHub Actions for Emacs Lisp checks",
   "main": "index.js",
   "scripts": {},
   "repository": {
