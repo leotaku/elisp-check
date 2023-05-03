@@ -25,6 +25,10 @@ jobs:
           - 26.2
           - 26.3
           - 27.1
+          - 27.2
+          - 28.1
+          - 28.2
+          - release-snapshot
         ignore_warnings:
           - true
         check:
@@ -61,6 +65,10 @@ jobs:
           - 26.2
           - 26.3
           - 27.1
+          - 27.2
+          - 28.1
+          - 28.2
+          - release-snapshot
           - snapshot
         ignore_warnings:
           - true
