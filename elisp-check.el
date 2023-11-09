@@ -194,7 +194,7 @@ documentation on the usage of PREFIX and KNOWN-BUFFERS."
             (current-buffer)))))
 
 (defun elisp-check--install-packages (packages)
-  "Install PKGS using the package.el package manager."
+  "Install PACKAGES using the package.el package manager."
   (let ((errors '()))
     (dolist (package packages)
       (elisp-check-debug "Installing: %s" package)
@@ -290,7 +290,7 @@ arbitrary code not controlled by the library author."
      ,@handlers))
 
 (defun elisp-check-listify (value)
-  "Return VAL if list, (list VAL) otherwise."
+  "Return VALUE if list, (list VALUE) otherwise."
   (if (listp value)
       value
     (list value)))
