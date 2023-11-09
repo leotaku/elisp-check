@@ -198,11 +198,8 @@ documentation on the usage of PREFIX and KNOWN-BUFFERS."
   (let ((errors '()))
     (dolist (package packages)
       (elisp-check-debug "Installing: %s" package)
-      (condition-case error
-          ;; This is helpful because package.el uses
-          ;; `condition-case-unless-debug' in a few places.
-          (let ((debug-on-error nil))
-            (package-install package))
+      (elisp-check-condition-case error
+          (package-install package)
         (error
          (push (elisp-check-format-error error) errors))))
     (when errors
@@ -277,6 +274,21 @@ its arguments.  The default value for HANDLER is `concat'."
             (push (apply handler captures) result)))
         result))))
 
+(defmacro elisp-check-condition-case (var bodyform &rest handlers)
+  "Run BODYFORM binding raised errors to VAR in HANDLERS.
+
+This form will also return control from errors that were thrown
+in nested blocks of `condition-case-unless-debug' and similar
+constructs, which is not the case with normal `condition-case'.
+
+It should be used whenever the BODYFORM may contain or load
+arbitrary code not controlled by the library author."
+  (declare (debug condition-case) (indent 2))
+  `(condition-case ,var
+       (let ((debug-on-error nil))
+         ,bodyform)
+     ,@handlers))
+
 (defun elisp-check-listify (value)
   "Return VAL if list, (list VAL) otherwise."
   (if (listp value)
@@ -287,7 +299,7 @@ its arguments.  The default value for HANDLER is `concat'."
 
 (defun elisp-check-load-file (&rest _other)
   "Run a `load-file' check on the current buffer."
-  (condition-case error
+  (elisp-check-condition-case error
       (load-file (buffer-file-name))
     (error (elisp-check-emit
             'error
