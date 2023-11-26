@@ -307,14 +307,12 @@ arbitrary code not controlled by the library author."
 
 (defun elisp-check-byte-compile (&rest other)
   "Run a `byte-compile-file' check on the current and OTHER buffers."
-  (ad-activate 'byte-compile-log-warning)
   (let ((byte-compile-dest-file-function
          (lambda (_file)
            (file-name-directory (make-temp-file "bytecomp-")))))
     (byte-compile-file (buffer-file-name))
     (dolist (buffer other)
-      (byte-compile-file (buffer-file-name buffer))))
-  (ad-deactivate 'byte-compile-log-warning))
+      (byte-compile-file (buffer-file-name buffer)))))
 
 (defun elisp-check--byte-compile-emit (message &optional pos _fill level)
   "Emit a CI message for MESSAGE, POS and LEVEL.
