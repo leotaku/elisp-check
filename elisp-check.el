@@ -243,7 +243,7 @@ When LEVEL is error, also set `elisp-check-has-failed'."
     (message "[ELISP-CHECK] %s" format)))
 
 (defun elisp-check-error (message &rest objects)
-  "Emit a CI error MESSAGE formatted with OBJECTS, then exit."
+  "Emit a CI error MESSAGE formatted with OBJECTS, then raise it."
   (let ((format (apply #'format message objects)))
     (elisp-check-emit 'error format)
     (error format)))
@@ -329,7 +329,7 @@ order to hook `byte-compile-file' into the CI message mechanism."
      (line-number-at-pos)
      (current-column))))
 
-;; Advice `byte-compile-log-warning' instead of using the proper
+;; Advise `byte-compile-log-warning' instead of using the proper
 ;; variable `byte-compile-log-warning-function' as it does not exist
 ;; for older versions of Emacs.
 
