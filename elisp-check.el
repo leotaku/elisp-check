@@ -222,19 +222,20 @@ When LEVEL is error, also set `elisp-check-has-failed'."
          (is-error (eq level 'error))
          (is-warning (eq level 'warning))
          (is-debug (eq level 'debug))
-         (full (concat
-                "::%s "
-                (when file (format "file=%s," file))
-                (when line (format "line=%s," line))
-                (when column (format "col=%s," column))
-                (format "::%s" message))))
+         (template (concat
+                    "::%s "
+                    (when file (format "file=%s," file))
+                    (when line (format "line=%s," line))
+                    (when column (format "col=%s," column))
+                    "::%s")))
     (cond
-     ((and is-warning elisp-check-ignore-warnings))
+     ((and is-warning elisp-check-ignore-warnings)
+      (message template 'debug (concat "Ignored warning: " message)))
      ((or is-error (and is-warning elisp-check-warnings-as-errors))
       (setq elisp-check-has-failed t)
-      (message full 'error))
+      (message template 'error message))
      ((or is-warning is-debug)
-      (message full level))
+      (message template level message))
      (t (elisp-check-error "Unsupported urgency level `%s'" level)))))
 
 (defun elisp-check-debug (message &rest objects)
