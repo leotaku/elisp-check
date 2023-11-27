@@ -103,10 +103,10 @@ See `elisp-check-alist' for a list of valid check names."
   "Apply the given CHECK-FUNS to the given BUFFERS."
   (dolist (buffer buffers)
     (with-current-buffer buffer
-      (elisp-check-debug "Checking file: %s" (buffer-file-name))
+      (elisp-check-log "Checking file: %s" (buffer-file-name))
       (let ((other (elisp-check--get-requires)))
         (dolist (check check-funs)
-          (elisp-check-debug "Running check: %s" check)
+          (elisp-check-log "Running check: %s" check)
           (apply check other))))))
 
 (defun elisp-check--get-buffers (file-or-files)
@@ -197,7 +197,7 @@ documentation on the usage of PREFIX and KNOWN-BUFFERS."
   "Install PACKAGES using the package.el package manager."
   (let ((errors '()))
     (dolist (package packages)
-      (elisp-check-debug "Installing: %s" package)
+      (elisp-check-log "Installing: %s" package)
       (elisp-check-condition-case error
           (package-install package)
         (error
@@ -238,7 +238,7 @@ When LEVEL is error, also set `elisp-check-has-failed'."
       (message template level message))
      (t (elisp-check-error "Unsupported urgency level `%s'" level)))))
 
-(defun elisp-check-debug (message &rest objects)
+(defun elisp-check-log (message &rest objects)
   "Emit a debug MESSAGE formatted with OBJECTS."
   (let ((format (apply #'format message objects)))
     (message "[ELISP-CHECK] %s" format)))
