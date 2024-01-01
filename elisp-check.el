@@ -1,6 +1,6 @@
 ;;; elisp-check.el --- Run Emacs Lisp checks for CI  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2019-2023 Leo Gaskin
+;; Copyright (C) 2019-2024 Leo Gaskin
 
 ;; Author: Leo Gaskin <leo.gaskin@le0.gs>
 ;; Created: 26 May 2019
