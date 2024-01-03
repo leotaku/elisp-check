@@ -353,11 +353,13 @@ order to hook `byte-compile-file' into the CI message mechanism."
 
 (defun elisp-check-package-lint (&rest other)
   "Run a `package-lint-buffer' check on the current and OTHER buffers."
-  (let ((package-lint-main-file (buffer-file-name)))
+  (let ((default-main-file (buffer-file-name)))
     (elisp-check--package-lint-buffer)
     (dolist (buffer other)
       (with-current-buffer buffer
-        (elisp-check--package-lint-buffer)))))
+        (let ((package-lint-main-file
+               (or package-lint-main-file default-main-file)))
+          (elisp-check--package-lint-buffer))))))
 
 (defun elisp-check--package-lint-buffer ()
   "Run a `package-lint-buffer' check on the current buffer."
