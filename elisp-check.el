@@ -137,12 +137,13 @@ File globbing is supported."
 
 Only return files in the same directory with the same PREFIX.
 Then walk the resulting buffers for more `require' statements.
-If PREFIX is not given, extract it from the current file name.
+If PREFIX is not given, extract it from the current file name,
+or the value of `package-lint-main-file' if that is set.
 
 When a buffer is a member of KNOWN-BUFFERS, do not return or
 search it for further `require' statements."
-  (let* ((file (file-name-nondirectory (buffer-file-name)))
-         (prefix (or prefix (file-name-sans-extension file)))
+  (let* ((file (or (bound-and-true-p package-lint-main-file) (buffer-file-name)))
+         (prefix (or prefix (file-name-sans-extension (file-name-nondirectory file))))
          (requires (elisp-check-parse "^[ ]*(require '\\(.*?\\))"))
          (fun (lambda (required)
                 (elisp-check--get-require
