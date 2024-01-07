@@ -74,7 +74,6 @@ The makem.sh project also includes a [comparison section](https://github.com/alp
 
 ### Disadvantages of `makem.sh`
 
-* Recommends adding a >1000 line shell script and Makefile to your project
 * No automatic integration with any CI service (manual setup is documented)
 * No code annotations
 * Depends on Bash (Make is optional)
