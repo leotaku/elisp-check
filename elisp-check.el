@@ -344,13 +344,16 @@ order to hook `byte-compile-file' into the CI message mechanism."
    level))
 
 (defmacro elisp-check--with-wrapped-byte-compile-log (&rest body)
-  `(unwind-protect
-       (progn
-         (ad-enable-advice 'byte-compile-log-warning 'around 'elisp-check--advice-byte-compile-log)
-         (ad-activate 'byte-compile-log-warning)
+  (if (version<= "26.1" emacs-version)
+      `(let ((byte-compile-log-warning-function #'elisp-check--byte-compile-emit))
          ,@body)
-     (ad-disable-advice 'byte-compile-log-warning 'around 'elisp-check--advice-byte-compile-log)
-     (ad-activate 'byte-compile-log-warning)))
+    `(unwind-protect
+         (progn
+           (ad-enable-advice 'byte-compile-log-warning 'around 'elisp-check--advice-byte-compile-log)
+           (ad-activate 'byte-compile-log-warning)
+           ,@body)
+       (ad-disable-advice 'byte-compile-log-warning 'around 'elisp-check--advice-byte-compile-log)
+       (ad-activate 'byte-compile-log-warning))))
 
 (defun elisp-check-package-lint (&rest other)
   "Run a `package-lint-buffer' check on the current and OTHER buffers."
