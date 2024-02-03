@@ -312,9 +312,10 @@ arbitrary code not controlled by the library author."
   (let ((byte-compile-dest-file-function
          (lambda (_file)
            (file-name-directory (make-temp-file "bytecomp-")))))
-    (byte-compile-file (buffer-file-name))
-    (dolist (buffer other)
-      (byte-compile-file (buffer-file-name buffer)))))
+    (elisp-check--with-wrapped-byte-compile-log
+     (byte-compile-file (buffer-file-name))
+     (dolist (buffer other)
+       (byte-compile-file (buffer-file-name buffer))))))
 
 (defun elisp-check--byte-compile-emit (message &optional pos _fill level)
   "Emit a CI message for MESSAGE, POS and LEVEL.
@@ -342,14 +343,13 @@ order to hook `byte-compile-file' into the CI message mechanism."
    fill
    level))
 
-;; Only enable the advice to `byte-compile-log-warning' when the
-;; variable `byte-compile-log-warning-function' is not available,
-;; otherwise use the proper interface.
-
-(eval-after-load 'bytecomp
-  '(if (boundp 'byte-compile-log-warning-function)
-       (setq byte-compile-log-warning-function #'elisp-check--byte-compile-emit)
-     (ad-enable-advice 'byte-compile-log-warning 'around 'elisp-check--advice-byte-compile-log)
+(defmacro elisp-check--with-wrapped-byte-compile-log (&rest body)
+  `(unwind-protect
+       (progn
+         (ad-enable-advice 'byte-compile-log-warning 'around 'elisp-check--advice-byte-compile-log)
+         (ad-activate 'byte-compile-log-warning)
+         ,@body)
+     (ad-disable-advice 'byte-compile-log-warning 'around 'elisp-check--advice-byte-compile-log)
      (ad-activate 'byte-compile-log-warning)))
 
 (defun elisp-check-package-lint (&rest other)
