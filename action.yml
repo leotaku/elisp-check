@@ -21,7 +21,7 @@ inputs:
       Whether to treat errors as warnings.
     default: false
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'index.js'
 branding:
   icon: 'align-left'
