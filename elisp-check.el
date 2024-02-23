@@ -151,6 +151,12 @@ search it for further `require' statements."
                  (cons (current-buffer) known-buffers)))))
     (delete-dups (apply #'append (mapcar fun requires)))))
 
+;; Ensure `package-lint-main-file' is always respected as a file-local
+;; variable, even if has not been loaded.  This is necessary because
+;; Emacs will only apply safe local variables in batch mode.
+
+(put 'package-lint-main-file 'safe-local-variable #'stringp)
+
 (defun elisp-check--get-require (name prefix &optional known-buffers)
   "Return required buffers for file with package NAME.
 
