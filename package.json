@@ -6,7 +6,7 @@
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/leotaku/emacs-action.git"
+    "url": "git+https://github.com/leotaku/elisp-check.git"
   },
   "keywords": [
     "emacs",
@@ -18,9 +18,9 @@
   "author": "Leo Gaskin <leo.gaskin@le0.gs>",
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/leotaku/emacs-action/issues"
+    "url": "https://github.com/leotaku/elisp-check/issues"
   },
-  "homepage": "https://github.com/leotaku/emacs-action#readme",
+  "homepage": "https://github.com/leotaku/elisp-check#readme",
   "dependencies": {
     "@actions/core": "^1.10.1",
     "@actions/exec": "^1.1.1"
