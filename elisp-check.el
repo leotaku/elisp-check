@@ -32,6 +32,8 @@
 ;;
 ;; Refer to the repository README.md for documentation.
 
+(require 'epg)
+
 ;;; Code:
 
 ;;;; Variables
