@@ -180,6 +180,7 @@ documentation on the usage of PREFIX and KNOWN-BUFFERS."
 (defun elisp-check--install-setup (check)
   "Setup package.el and install packages for the given CHECK."
   (package-initialize)
+  (elisp-check--package-import-keyring "066DAFCB81E42C40")
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
   (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
   (package-refresh-contents)
@@ -213,6 +214,15 @@ documentation on the usage of PREFIX and KNOWN-BUFFERS."
       (elisp-check-error
        "Packages could not be installed:\n    %s"
        (mapconcat #'identity errors "\n    ")))))
+
+(defun elisp-check--package-import-keyring (keyid)
+  "Import keys with KEYID."
+  (let ((context (epg-make-context 'OpenPGP)))
+    (when package-gnupghome-dir
+      (with-file-modes 448
+        (make-directory package-gnupghome-dir t))
+      (setf (epg-context-home-directory context) package-gnupghome-dir))
+    (epg-import-keys-from-server context (list keyid))))
 
 ;;;; Standard library
 
