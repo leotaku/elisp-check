@@ -220,7 +220,9 @@ documentation on the usage of PREFIX and KNOWN-BUFFERS."
 (defun elisp-check--package-import-keyring (keyid)
   "Import keys with KEYID."
   (let ((context (epg-make-context 'OpenPGP)))
-    (when package-gnupghome-dir
+    (let ((package-gnupghome-dir
+           (or (bound-and-true-p package-gnupghome-dir)
+               (expand-file-name "gnupg" package-user-dir))))
       (with-file-modes 448
         (make-directory package-gnupghome-dir t))
       (setf (epg-context-home-directory context) package-gnupghome-dir))
