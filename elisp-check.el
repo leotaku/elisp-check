@@ -184,8 +184,8 @@ documentation on the usage of PREFIX and KNOWN-BUFFERS."
   (package-initialize)
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
   (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
-  (package-refresh-contents)
   (package-import-keyring "data/gnu-elpa.pgp-keyring")
+  (package-refresh-contents)
   (elisp-check--install-packages (elisp-check--get-props check :package)))
 
 (defun elisp-check--install-package-requires (&rest _other)
