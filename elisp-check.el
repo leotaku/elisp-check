@@ -185,7 +185,7 @@ documentation on the usage of PREFIX and KNOWN-BUFFERS."
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
   (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
   (package-refresh-contents)
-  (elisp-check--package-import-keyring "AC49B8A5FDED6931F40EE78BF993C03786DE7ECA")
+  (package-import-keyring "data/gnu-elpa.pgp-keyring")
   (elisp-check--install-packages (elisp-check--get-props check :package)))
 
 (defun elisp-check--install-package-requires (&rest _other)
@@ -216,20 +216,6 @@ documentation on the usage of PREFIX and KNOWN-BUFFERS."
       (elisp-check-error
        "Packages could not be installed:\n    %s"
        (mapconcat #'identity errors "\n    ")))))
-
-(defun elisp-check--package-import-keyring (keyid &optional server)
-  "Import keys with KEYID."
-  (let ((server (or server "hkp://keys.openpgp.org"))
-        (package-gnupghome-dir
-         (or (bound-and-true-p package-gnupghome-dir)
-             (expand-file-name "gnupg" package-user-dir))))
-    (with-temp-buffer
-      (when (/= 0 (call-process
-                   "gpg" nil (current-buffer) nil
-                   "--homedir" package-gnupghome-dir
-                   "--keyserver" server
-                   "--receive-keys" keyid))
-        (error (buffer-string))))))
 
 ;;;; Standard library
 
