@@ -182,10 +182,10 @@ documentation on the usage of PREFIX and KNOWN-BUFFERS."
 (defun elisp-check--install-setup (check)
   "Setup package.el and install packages for the given CHECK."
   (package-initialize)
-  (elisp-check--package-import-keyring "066DAFCB81E42C40")
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
   (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
   (package-refresh-contents)
+  (elisp-check--package-import-keyring "066DAFCB81E42C40")
   (elisp-check--install-packages (elisp-check--get-props check :package)))
 
 (defun elisp-check--install-package-requires (&rest _other)
