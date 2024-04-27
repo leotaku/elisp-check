@@ -217,15 +217,17 @@ documentation on the usage of PREFIX and KNOWN-BUFFERS."
        "Packages could not be installed:\n    %s"
        (mapconcat #'identity errors "\n    ")))))
 
-(defun elisp-check--package-import-keyring (keyid)
+(defun elisp-check--package-import-keyring (keyid &optional server)
   "Import keys with KEYID."
-  (let ((package-gnupghome-dir
+  (let ((server (or server "hkp://keys.openpgp.org"))
+        (package-gnupghome-dir
          (or (bound-and-true-p package-gnupghome-dir)
              (expand-file-name "gnupg" package-user-dir))))
     (with-temp-buffer
       (when (/= 0 (call-process
                    "gpg" nil (current-buffer) nil
                    "--homedir" package-gnupghome-dir
+                   "--keyserver" server
                    "--receive-keys" keyid))
         (error (buffer-string))))))
 
