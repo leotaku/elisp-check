@@ -32,8 +32,6 @@
 ;;
 ;; Refer to the repository README.md for documentation.
 
-(require 'epg)
-
 ;;; Code:
 
 ;;;; Variables
@@ -184,7 +182,6 @@ documentation on the usage of PREFIX and KNOWN-BUFFERS."
   (package-initialize)
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
   (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
-  (package-import-keyring "data/gnu-elpa.pgp-keyring")
   (package-refresh-contents)
   (elisp-check--install-packages (elisp-check--get-props check :package)))
 
@@ -209,7 +206,8 @@ documentation on the usage of PREFIX and KNOWN-BUFFERS."
     (dolist (package packages)
       (elisp-check-log "Installing: %s" package)
       (elisp-check-condition-case error
-          (package-install package)
+          (let ((package-check-signature nil))
+            (package-install package))
         (error
          (push (elisp-check-format-error error) errors))))
     (when errors
