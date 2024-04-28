@@ -202,12 +202,13 @@ documentation on the usage of PREFIX and KNOWN-BUFFERS."
 
 (defun elisp-check--install-packages (packages)
   "Install PACKAGES using the package.el package manager."
-  (let ((errors '()))
+  (let ((package-check-signature
+         (if (version< emacs-version "27") nil package-check-signature))
+        (errors '()))
     (dolist (package packages)
       (elisp-check-log "Installing: %s" package)
       (elisp-check-condition-case error
-          (let ((package-check-signature nil))
-            (package-install package))
+          (package-install package)
         (error
          (push (elisp-check-format-error error) errors))))
     (when errors
