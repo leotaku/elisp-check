@@ -48,7 +48,7 @@ jobs:
         file: elisp-check.el
         check: ${{ matrix.check }}
         ignore_warnings: ${{ matrix.ignore_warnings }}
-  test-standalone:
+  test-builtin:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -78,7 +78,6 @@ jobs:
           - load-file
           - byte-compile
           - checkdoc
-          - package-lint
     steps:
     - uses: actions/checkout@v4
     - uses: purcell/setup-emacs@master
