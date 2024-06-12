@@ -186,9 +186,11 @@ documentation on the usage of PREFIX and KNOWN-BUFFERS."
   (elisp-check--install-packages (elisp-check--get-props check :package)))
 
 (defun elisp-check--install-package-requires (&rest _other)
-  "Install packages for Package-Requires for current buffer."
-  (let ((pkgs (elisp-check--get-package-requires)))
-    (elisp-check--install-packages pkgs)))
+  "Install packages for `package-lint-main-file' or current buffer."
+  (let ((file (or (bound-and-true-p package-lint-main-file) (buffer-file-name))))
+    (with-current-buffer (find-file-noselect file)
+      (let ((pkgs (elisp-check--get-package-requires)))
+        (elisp-check--install-packages pkgs)))))
 
 (defun elisp-check--get-package-requires ()
   "Get list of packages for Package-Requires for current buffer."
