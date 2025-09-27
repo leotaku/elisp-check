@@ -11,7 +11,7 @@ inputs:
     description: |
       Entry file for Emacs Lisp check.
       Basic globbing is supported.
-    default: '*.el'
+    default: '[!.]*.el'
   ignore_warnings:
     description: |
       Whether to ignore warnings.
