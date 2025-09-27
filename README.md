@@ -68,7 +68,7 @@ For an example of real-life usage, see the [Actions config for my `theist-mode` 
 uses: leotaku/elisp-check@master
 with:
   check: melpa
-  file: '*.el'
+  file: '[!.]*.el'
   ignore_warnings: false
   warnings_as_errors: false
 ```
