@@ -42,7 +42,7 @@ jobs:
             check: melpa
             ignore_warnings: false
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v7
     - uses: purcell/setup-emacs@master
       with:
         version: ${{ matrix.emacs_version }}
@@ -82,7 +82,7 @@ jobs:
           - byte-compile
           - checkdoc
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v7
     - uses: purcell/setup-emacs@master
       with:
         version: ${{ matrix.emacs_version }}
