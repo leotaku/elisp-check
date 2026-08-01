@@ -22,8 +22,8 @@
   },
   "homepage": "https://github.com/leotaku/elisp-check#readme",
   "dependencies": {
-    "@actions/core": "^1.11.1",
-    "@actions/exec": "^1.1.1"
+    "@actions/core": "^3.0.1",
+    "@actions/exec": "^3.0.0"
   },
   "devDependencies": {}
 }
