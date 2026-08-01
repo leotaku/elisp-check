@@ -3,6 +3,7 @@
   "version": "1.4.0",
   "description": "GitHub Actions for Emacs Lisp checks",
   "main": "index.js",
+  "type": "module",
   "scripts": {},
   "repository": {
     "type": "git",
