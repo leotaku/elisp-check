@@ -1,6 +1,6 @@
-const core = require('@actions/core');
-const exec = require('@actions/exec');
-const local_file_name = __dirname + '/elisp-check.el';
+const core = await import('@actions/core');
+const exec = await import('@actions/exec');
+const local_file_name = import.meta.dirname + '/elisp-check.el';
 
 async function main() {
   try {
