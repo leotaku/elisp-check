@@ -210,7 +210,9 @@ documentation on the usage of PREFIX and KNOWN-BUFFERS."
     (dolist (package packages)
       (elisp-check-log "Installing: %s" package)
       (elisp-check-condition-case error
-          (package-install package)
+          (package-install (if (fboundp 'package-get-descriptor)
+                               (package-get-descriptor package)
+                             package))
         (error
          (push (elisp-check-format-error error) errors))))
     (when errors
